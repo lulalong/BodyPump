@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BodyPump">
+<title>Nu Metal BodyPump</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #c0392b;
+    --accent2: #8e1c14;
+    --pink: #c27ba0;
+    --pink-dim: #7a3d5f;
+    --text: #f0f0f0;
+    --text-dim: #888;
+    --banner: #1a0a08;
+    --banner-border: #5B0F00;
+    --active-glow: rgba(192, 57, 43, 0.15);
+    --active-border: #c0392b;
+  }
+
+- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Barlow’, sans-serif;
+height: 100vh;
+height: 100dvh;
+overflow: hidden;
+display: flex;
+flex-direction: column;
+padding-left: env(safe-area-inset-left);
+padding-right: env(safe-area-inset-right);
+padding-bottom: env(safe-area-inset-bottom);
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+touch-action: manipulation;
+}
+
+/* ── WAKE LOCK INDICATOR ── */
+#wake-indicator {
+width: 7px; height: 7px;
+border-radius: 50%;
+background: #333;
+flex-shrink: 0;
+transition: background 0.3s;
+}
+#wake-indicator.active { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
+
+/* ── BIG TAP ZONE ── */
+#tap-zone {
+position: absolute;
+inset: 0;
+z-index: 10;
+}
+
+/* ── HEADER ── */
+#header {
+display: flex;
+align-items: center;
+padding: 6px 14px;
+padding-top: max(6px, env(safe-area-inset-top));
+background: var(–surface);
+border-bottom: 2px solid var(–accent2);
+flex-shrink: 0;
+gap: 8px;
+position: relative;
+z-index: 20;
+flex-wrap: nowrap;
+min-height: 0;
+}
+
+#track-info {
+display: flex;
+flex-direction: column;
+min-width: 0;
+flex: 1;
+overflow: hidden;
+}
+
+#track-name {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+letter-spacing: 2px;
+color: var(–text);
+line-height: 1;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+#song-info {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+color: var(–text-dim);
+letter-spacing: 1px;
+text-transform: uppercase;
+margin-top: 1px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+/* Dots moved to sub-bar below header */
+#progress-dots {
+display: flex;
+gap: 5px;
+align-items: center;
+flex-shrink: 0;
+}
+
+.dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: var(–border);
+border: 1px solid #333;
+transition: all 0.3s ease;
+cursor: pointer;
+position: relative;
+padding: 6px;
+margin: -6px;
+background-clip: content-box;
+}
+.dot:hover::after {
+content: attr(data-label);
+position: absolute;
+bottom: 18px;
+left: 50%;
+transform: translateX(-50%);
+background: #222;
+color: var(–text);
+font-size: 10px;
+white-space: nowrap;
+padding: 3px 6px;
+border-radius: 3px;
+font-family: ‘Barlow Condensed’, sans-serif;
+letter-spacing: 0.5px;
+pointer-events: none;
+}
+.dot.done { background: var(–accent2); border-color: var(–accent2); background-clip: content-box; }
+.dot.active { background: var(–accent); border-color: var(–accent); box-shadow: 0 0 6px var(–accent); width: 10px; height: 10px; background-clip: content-box; }
+
+#clock {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+color: var(–accent);
+letter-spacing: 2px;
+min-width: 52px;
+text-align: right;
+flex-shrink: 0;
+}
+
+/* ── CONTROLS ── */
+#controls {
+display: flex;
+gap: 5px;
+align-items: center;
+flex-shrink: 0;
+}
+
+.btn {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 5px 10px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.15s;
+min-height: 32px;
+min-width: 32px;
+white-space: nowrap;
+}
+.btn-primary {
+background: var(–accent);
+color: white;
+padding: 5px 16px;
+font-size: 13px;
+}
+.btn-primary:hover { background: #e74c3c; }
+.btn-secondary {
+background: transparent;
+color: var(–text-dim);
+border: 1px solid #333;
+font-size: 14px;
+}
+.btn-secondary:hover { border-color: var(–text-dim); color: var(–text); }
+.btn-ghost {
+background: transparent;
+color: var(–text-dim);
+font-size: 14px;
+padding: 4px 8px;
+}
+.btn-ghost:hover { color: var(–text); }
+
+/* ── SUB-BAR (dots + clock under header) ── */
+#sub-bar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 4px 14px;
+background: #0a0a0a;
+border-bottom: 1px solid var(–border);
+flex-shrink: 0;
+}
+
+/* ── MAIN SCROLL AREA ── */
+#scroll-container {
+flex: 1;
+overflow: hidden;
+position: relative;
+}
+
+#scroll-track {
+transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+padding: 0 0 60vh 0;
+}
+
+/* ── ROWS ── */
+.row {
+display: grid;
+grid-template-columns: 220px 1fr 90px;
+border-bottom: 1px solid var(–border);
+transition: all 0.4s ease;
+opacity: 0.35;
+position: relative;
+}
+
+.row.banner {
+grid-template-columns: 1fr;
+background: var(–banner);
+border-left: 3px solid var(–banner-border);
+opacity: 0.45;
+}
+
+.row.active {
+opacity: 1;
+background: #1a2a1a;
+border-bottom-color: #3a7a3a;
+border-left: 3px solid #4caf50;
+}
+
+.row.active.banner {
+background: #1a2a1a;
+border-left-color: #4caf50;
+border-bottom-color: #3a7a3a;
+opacity: 1;
+}
+
+.row.next {
+opacity: 0.7;
+}
+
+.cell {
+padding: 20px 24px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.cell-timing {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 32px;
+color: var(–text-dim);
+border-right: 1px solid var(–border);
+overflow: hidden;
+word-break: break-all;
+letter-spacing: 1px;
+}
+
+.row.active .cell-timing {
+font-size: 44px;
+color: #ffffff;
+}
+
+.cell-move {
+font-family: ‘Barlow’, sans-serif;
+font-size: 26px;
+font-weight: 600;
+color: #ffffff;
+line-height: 1.2;
+}
+
+.row.active .cell-move {
+font-size: 36px;
+font-weight: 700;
+color: #ffffff;
+}
+
+.cell-cue {
+font-size: 15px;
+font-weight: 400;
+color: var(–text-dim);
+margin-top: 4px;
+font-style: italic;
+letter-spacing: 0.5px;
+}
+
+.cell-reps {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 42px;
+color: var(–text-dim);
+text-align: center;
+border-left: 1px solid var(–border);
+letter-spacing: 1px;
+}
+
+.row.active .cell-reps {
+font-size: 64px;
+color: #4caf50;
+}
+
+.cell-banner {
+padding: 16px 24px;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 20px;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: #888;
+}
+
+.row.active .cell-banner {
+font-size: 26px;
+color: #ffffff;
+}
+
+/* ── HEADER ROW ── */
+.row-header {
+display: grid;
+grid-template-columns: 220px 1fr 90px;
+border-bottom: 2px solid var(–accent2);
+opacity: 1 !important;
+background: #0f0f0f;
+}
+
+.cell-header {
+padding: 10px 20px;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–text-dim);
+}
+
+.cell-header:last-child { text-align: center; }
+
+/* ── TRACK META STRIP ── */
+.track-meta {
+display: flex;
+gap: 24px;
+padding: 14px 20px;
+background: #0d0d0d;
+border-bottom: 2px solid var(–accent2);
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 13px;
+letter-spacing: 1px;
+text-transform: uppercase;
+}
+
+.meta-item { color: var(–text-dim); }
+.meta-item span { color: var(–text); font-weight: 600; }
+
+/* ── PROGRESS BAR ── */
+#song-progress-bar {
+height: 3px;
+background: var(–border);
+flex-shrink: 0;
+}
+#song-progress-fill {
+height: 100%;
+background: var(–accent);
+width: 0%;
+transition: width 1s linear;
+}
+
+/* ── TRACK SELECT MODAL ── */
+#track-select {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.92);
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 100;
+backdrop-filter: blur(4px);
+}
+
+#track-select.hidden { display: none; }
+
+#track-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+max-width: 600px;
+width: 90%;
+padding: 20px;
+}
+
+#track-select h2 {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 36px;
+letter-spacing: 3px;
+color: var(–accent);
+margin-bottom: 24px;
+text-align: center;
+grid-column: 1/-1;
+}
+
+.track-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 4px;
+padding: 20px 24px;
+cursor: pointer;
+transition: all 0.2s;
+position: relative;
+overflow: hidden;
+min-height: 80px;
+}
+
+.track-card::before {
+content: ‘’;
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 3px;
+background: var(–accent);
+transform: scaleY(0);
+transition: transform 0.2s;
+}
+
+.track-card:hover {
+border-color: var(–accent2);
+background: #161616;
+}
+.track-card:hover::before { transform: scaleY(1); }
+
+.track-card-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 11px;
+letter-spacing: 2px;
+color: var(–text-dim);
+margin-bottom: 4px;
+}
+
+.track-card-name {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+letter-spacing: 1px;
+color: var(–text);
+line-height: 1;
+}
+
+.track-card-song {
+font-size: 12px;
+color: var(–text-dim);
+margin-top: 4px;
+font-family: ‘Barlow Condensed’, sans-serif;
+letter-spacing: 0.5px;
+}
+
+/* ── COUNTDOWN OVERLAY ── */
+#countdown-overlay {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.85);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+z-index: 50;
+backdrop-filter: blur(2px);
+}
+#countdown-overlay.hidden { display: none; }
+
+#countdown-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 160px;
+color: var(–accent);
+line-height: 1;
+animation: pulse-num 1s ease-in-out infinite;
+}
+
+#countdown-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 18px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–text-dim);
+margin-top: 8px;
+}
+
+@keyframes pulse-num {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.06); }
+}
+
+/* ── MANUAL EDIT MODE ── */
+.row .edit-dur {
+display: none;
+position: absolute;
+right: 8px;
+top: 50%;
+transform: translateY(-50%);
+z-index: 5;
+align-items: center;
+gap: 4px;
+}
+body.editing .row .edit-dur { display: flex; }
+
+.edit-dur input {
+width: 54px;
+background: #1a1a1a;
+border: 1px solid #555;
+border-radius: 3px;
+color: #ffaa00;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 14px;
+font-weight: 700;
+text-align: center;
+padding: 4px 6px;
+-moz-appearance: textfield;
+}
+.edit-dur input::-webkit-outer-spin-button,
+.edit-dur input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.edit-dur input:focus { outline: none; border-color: #ffaa00; }
+.edit-dur label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+color: #666;
+letter-spacing: 1px;
+}
+
+#edit-intro-bar {
+display: none;
+align-items: center;
+gap: 12px;
+padding: 10px 20px;
+background: #0e0e00;
+border-bottom: 2px solid #888800;
+flex-shrink: 0;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 13px;
+letter-spacing: 1px;
+color: #aaa;
+}
+body.editing #edit-intro-bar { display: flex; }
+#edit-intro-bar strong { color: #ffdd00; }
+#edit-intro-bar input {
+width: 64px;
+background: #1a1a00;
+border: 1px solid #888800;
+border-radius: 3px;
+color: #ffdd00;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 16px;
+font-weight: 700;
+text-align: center;
+padding: 5px 8px;
+-moz-appearance: textfield;
+}
+#edit-intro-bar input::-webkit-outer-spin-button,
+#edit-intro-bar input::-webkit-inner-spin-button { -webkit-appearance: none; }
+#edit-intro-bar input:focus { outline: none; border-color: #ffdd00; }
+
+/* ── NEXT MOVE COUNTDOWN ── */
+#next-move-countdown {
+position: fixed;
+bottom: 80px;
+left: 50%;
+transform: translateX(-50%);
+background: #1a1400;
+border: 2px solid #f0a500;
+border-radius: 6px;
+padding: 12px 28px;
+text-align: center;
+z-index: 15;
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+#next-move-countdown.visible { opacity: 1; }
+
+#nmc-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 12px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: #f0a500;
+margin-bottom: 2px;
+}
+#nmc-move {
+font-family: ‘Barlow’, sans-serif;
+font-size: 20px;
+font-weight: 700;
+color: #ffffff;
+}
+#nmc-secs {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 13px;
+letter-spacing: 2px;
+color: #f0a500;
+margin-top: 2px;
+}
+
+/* ── CALIBRATION MODE ── */
+body.calibrating #tap-zone { pointer-events: none; }
+
+#calib-bar {
+display: none;
+align-items: center;
+gap: 12px;
+padding: 10px 20px;
+background: #1a1000;
+border-bottom: 2px solid #c87000;
+flex-shrink: 0;
+z-index: 15;
+position: relative;
+}
+#calib-bar.visible { display: flex; }
+
+#calib-label {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 13px;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: #c87000;
+flex: 1;
+}
+#calib-label strong { color: #ffaa00; }
+
+#calib-next-btn {
+background: #c87000;
+color: #000;
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 20px;
+letter-spacing: 2px;
+padding: 10px 28px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+min-height: 52px;
+min-width: 160px;
+transition: background 0.1s;
+}
+#calib-next-btn:active { background: #ffaa00; transform: scale(0.97); }
+
+#calib-save-btn {
+background: #2ecc71;
+color: #000;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+padding: 10px 22px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+min-height: 52px;
+display: none;
+}
+#calib-save-btn.visible { display: block; }
+
+/* Calibrated rows get a small timestamp badge */
+.row .calib-stamp {
+display: none;
+position: absolute;
+top: 4px; right: 6px;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 11px;
+color: #c87000;
+letter-spacing: 1px;
+}
+body.calibrating .row .calib-stamp { display: block; }
+
+/* Calibration result modal */
+#calib-result {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.95);
+z-index: 200;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+padding: 30px 24px;
+overflow-y: auto;
+display: none;
+}
+#calib-result.visible { display: flex; }
+#calib-result h2 {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 30px;
+letter-spacing: 3px;
+color: #ffaa00;
+margin-bottom: 8px;
+}
+#calib-result p {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 14px;
+color: var(–text-dim);
+margin-bottom: 20px;
+text-align: center;
+letter-spacing: 0.5px;
+line-height: 1.5;
+}
+#calib-result pre {
+background: #111;
+border: 1px solid #333;
+border-radius: 4px;
+padding: 16px;
+font-size: 12px;
+color: #aaffaa;
+width: 100%;
+max-width: 700px;
+overflow-x: auto;
+white-space: pre-wrap;
+word-break: break-all;
+font-family: ‘Courier New’, monospace;
+line-height: 1.6;
+margin-bottom: 16px;
+}
+#calib-result .calib-actions {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+justify-content: center;
+margin-top: 8px;
+}
+
+/* ── LANDSCAPE / LARGE SCREEN TWEAKS ── */
+@media (orientation: landscape) and (min-width: 900px) {
+.row { grid-template-columns: 240px 1fr 100px; }
+.row-header { grid-template-columns: 240px 1fr 100px; }
+.cell-timing { font-size: 34px; }
+.row.active .cell-timing { font-size: 42px; }
+.cell-move { font-size: 28px; }
+.row.active .cell-move { font-size: 40px; }
+.cell-reps { font-size: 46px; }
+.row.active .cell-reps { font-size: 70px; }
+.cell-banner { font-size: 22px; }
+.row.active .cell-banner { font-size: 28px; }
+}
+
+/* ── PORTRAIT / SMALL SCREEN ── */
+@media (max-width: 600px) {
+.row { grid-template-columns: 140px 1fr 70px; }
+.row-header { grid-template-columns: 140px 1fr 70px; }
+#track-name { font-size: 22px; }
+#song-info { font-size: 11px; }
+#progress-dots { display: none; }
+#clock { font-size: 24px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Track Select Modal -->
+
+<div id="track-select">
+  <div id="track-grid">
+    <h2>Nu Metal BodyPump</h2>
+  </div>
+</div>
+
+<!-- Countdown Overlay -->
+
+<div id="countdown-overlay" class="hidden">
+  <div id="countdown-num">3</div>
+  <div id="countdown-label">Starting track…</div>
+</div>
+
+<!-- Header -->
+
+<div id="header">
+  <div id="track-info">
+    <div id="track-name">—</div>
+    <div id="song-info">—</div>
+  </div>
+  <div id="controls">
+    <div id="wake-indicator" title="Screen wake lock"></div>
+    <button class="btn btn-secondary" onclick="showTrackSelect()">⟵</button>
+    <button class="btn btn-secondary" id="btn-restart" onclick="restartTrack()">↺</button>
+    <button class="btn btn-secondary" id="btn-edit" onclick="startEditMode()">✏️</button>
+    <button class="btn btn-secondary" id="btn-calib" onclick="startCalibration()">🎯</button>
+    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">PLAY</button>
+  </div>
+</div>
+
+<!-- Sub-bar: dots + clock -->
+
+<div id="sub-bar">
+  <div id="progress-dots"></div>
+  <div id="clock">0:00</div>
+</div>
+
+<!-- Song progress bar -->
+
+<div id="song-progress-bar"><div id="song-progress-fill"></div></div>
+
+<!-- Edit intro offset bar -->
+
+<div id="edit-intro-bar">
+  <span>Intro offset (secs before first move):</span>
+  <input type="number" id="edit-intro-input" min="0" max="300" value="0" oninput="applyEditChanges()">
+  <strong id="edit-intro-label"></strong>
+  <button class="btn btn-secondary" style="margin-left:auto" onclick="saveEditChanges()">Save</button>
+  <button class="btn btn-secondary" onclick="stopEditMode()">Cancel</button>
+</div>
+
+<!-- Calibration bar (shown in calibration mode) -->
+
+<div id="calib-bar">
+  <div id="calib-label">🎯 Calibration — <strong id="calib-move-name">—</strong></div>
+  <button id="calib-save-btn" onclick="finishCalibration()">Save timestamps</button>
+  <button id="calib-next-btn" onclick="calibTap()">TAP ▶ NEXT MOVE</button>
+</div>
+
+<!-- Calibration result modal -->
+
+<div id="calib-result">
+  <h2>Calibration Complete</h2>
+  <p>Copy these durations into the TRACKS data for <strong id="calib-result-track"></strong>.<br>Replace the existing <code>duration</code> values for each move.</p>
+  <pre id="calib-result-code"></pre>
+  <div class="calib-actions">
+    <button class="btn btn-secondary" onclick="document.getElementById('calib-result').classList.remove('visible')">Close</button>
+    <button class="btn btn-primary" onclick="copyCalibResult()">Copy to clipboard</button>
+  </div>
+</div>
+
+<!-- Scroll area -->
+
+<div id="scroll-container" style="position:relative;">
+  <div id="tap-zone" onclick="handleTapZone()"></div>
+  <div id="scroll-track">
+    <!-- Track meta strip -->
+    <div class="track-meta" id="track-meta-strip"></div>
+    <!-- Header row -->
+    <div class="row-header">
+      <div class="cell-header">Timing</div>
+      <div class="cell-header">Move</div>
+      <div class="cell-header">Reps</div>
+    </div>
+    <!-- Rows injected here -->
+    <div id="rows-container"></div>
+  </div>
+</div>
+
+<!-- Next move countdown -->
+
+<div id="next-move-countdown">
+  <div id="nmc-label">Next move in</div>
+  <div id="nmc-move">—</div>
+  <div id="nmc-secs">3 seconds</div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// TRACK DATA
+// Each move: { type: 'data'|'banner', timing, move, reps, cue, highlight, duration (seconds) }
+// duration = how long this move takes in the actual song
+// ─────────────────────────────────────────────
+
+const TRACKS = [
+  {
+    id: 'warmup',
+    name: 'Warm Up',
+    song: "It's On!",
+    artist: 'Korn',
+    weight: 'Warm up',
+    startAt: 'Guitars',
+    introOffset: 23,
+    totalDuration: 266,
+    moves: [
+      { type:'data', timing:'4/4',     move:'Slow Curl',                  reps:'4',  highlight:false, duration:21 },
+      { type:'data', timing:'1/1/1/1', move:'RDL and Single Row',         reps:'8',  highlight:true,  duration:21 },
+      { type:'data', timing:'4/4',     move:'Slow Curl',                  reps:'4',  highlight:false, duration:21 },
+      { type:'data', timing:'4/4',     move:'Slow RDL',                   reps:'2',  highlight:false, duration:10 },
+      { type:'data', timing:'1/1/1/1', move:'RDL and Single Row',         reps:'8',  highlight:true,  duration:21 },
+      { type:'data', timing:'4/4',     move:'Slow Curl', cue:'(stagger down on 3rd)', reps:'4', highlight:false, duration:21 },
+      { type:'banner', move:'Change grip', duration:3 },
+      { type:'data', timing:'4/4',     move:'Slow RDL',                   reps:'4',  highlight:false, duration:21 },
+      { type:'data', timing:'4/4',     move:'Upright Row',                reps:'2',  highlight:false, duration:10 },
+      { type:'data', timing:'2/2',     move:'Slow Clean and Press',       reps:'4',  highlight:false, duration:21 },
+      { type:'data', timing:'4/4',     move:'Slow RDL', cue:'(stagger down on 3rd)', reps:'4', highlight:false, duration:20 },
+      { type:'banner', move:'Bar on shoulders', duration:11 },
+      { type:'data', timing:'8/8',     move:'Super Slow Squat',           reps:'4',  highlight:false, duration:21 },
+      { type:'data', timing:'1/3',     move:'Fast down Slow up Squat',    reps:'8',  highlight:false, duration:21 },
+    ]
+  },
+  {
+    id: 'squats',
+    name: 'Squats',
+    song: 'Roots Bloody Roots',
+    artist: 'Sepultura',
+    weight: '7.5kg',
+    startAt: 'Vocal',
+    totalDuration: 300,
+    moves: [
+      { type:'data', timing:'1/1/2',   move:'Low bounce with float',  reps:'8',  highlight:true,  duration:32 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
+      { type:'data', timing:'1/1/2',   move:'Low bounce with float',  reps:'8',  highlight:true,  duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
+      { type:'banner', move:'Break to drums', duration:8 },
+      { type:'data', timing:'4/4',     move:'Slow squat',             reps:'2',  highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
+      { type:'data', timing:'1/1/1/1', move:'Bottom bounce',          reps:'16', highlight:true,  duration:32 },
+      { type:'banner', move:'Pause', duration:4 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'4',  highlight:false, duration:32 },
+      { type:'banner', move:'Pause / Stagger Drop on drum', duration:4 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'2',  highlight:false, duration:32 },
+    ]
+  },
+  {
+    id: 'chest',
+    name: 'Chest',
+    song: 'Head Up',
+    artist: 'Deftones',
+    weight: '5kg',
+    startAt: 'Vocal',
+    totalDuration: 280,
+    moves: [
+      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
+      { type:'banner', move:'Pause', duration:4 },
+      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'2/1/1/1/3', move:'Stagger down float up',          reps:'4', highlight:true,  duration:32 },
+      { type:'banner', move:'Pause', duration:4 },
+      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'2/1/1/1/3', move:'Stagger down float up',          reps:'4', highlight:true,  duration:32 },
+      { type:'banner', move:'Pause', duration:4 },
+      { type:'data', timing:'2/2/2/2',   move:'Single press and skull crusher', reps:'8', highlight:false, duration:64 },
+      { type:'data', timing:'1/1/1/1',   move:'Pulses middle',                  reps:'8', highlight:true,  duration:32 },
+    ]
+  },
+  {
+    id: 'back',
+    name: 'Back',
+    song: 'Walk',
+    artist: 'Pantera',
+    weight: '7.5kg',
+    startAt: 'Drums',
+    totalDuration: 320,
+    moves: [
+      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'1',  highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Down and triple row',   reps:'2',  highlight:false, duration:32 },
+      { type:'banner', move:'Hold to verse', duration:8 },
+      { type:'data', timing:'4/4',     move:'Medium RDL',            reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'1/3',     move:'Fast down slow up RDL', reps:'',   highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger RDL',           reps:'',   highlight:false, duration:16 },
+      { type:'banner', move:'Repeat x 3', duration:4 },
+      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
+      { type:'banner', move:'Rest to verse', duration:8 },
+      { type:'data', timing:'4/4',     move:'Medium RDL',            reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'1/3',     move:'Fast down slow up RDL', reps:'',   highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger RDL',           reps:'',   highlight:false, duration:16 },
+      { type:'banner', move:'Repeat x 3', duration:4 },
+      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
+      { type:'banner', move:'Rest for chaos', duration:8 },
+      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'1',  highlight:false, duration:16 },
+      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
+      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'2',  highlight:false, duration:32 },
+    ]
+  },
+  {
+    id: 'biceps',
+    name: 'Biceps',
+    song: 'From This Day',
+    artist: 'Machine Head',
+    weight: '5kg',
+    startAt: 'Gedup',
+    totalDuration: 290,
+    moves: [
+      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
+      { type:'banner', move:'Break to verse', duration:8 },
+      { type:'data', timing:'4/4/4/4', move:'Stagger curl',    reps:'2', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger curl',    reps:'2', highlight:false, duration:16 },
+      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
+      { type:'banner', move:'Pause', duration:4 },
+      { type:'data', timing:'4/4/4/4', move:'Stagger curl',    reps:'2', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger curl',    reps:'2', highlight:false, duration:16 },
+      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
+      { type:'banner', move:'Rest (two growls)', duration:8 },
+      { type:'data', timing:'1/1/1/1', move:'Pulses', cue:'(I can feel…)', reps:'8', highlight:true, duration:32 },
+      { type:'banner', move:'Hold to chorus', duration:8 },
+      { type:'data', timing:'8/8',     move:'Super slow curl', reps:'2', highlight:false, duration:32 },
+      { type:'banner', move:'Hold to chorus', duration:8 },
+      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
+    ]
+  },
+  {
+    id: 'triceps',
+    name: 'Triceps',
+    song: 'Linchpin',
+    artist: 'Fear Factory',
+    weight: '5kg',
+    startAt: 'Apart',
+    totalDuration: 270,
+    moves: [
+      { type:'data', timing:'8/8',     move:'Slow tricep dip',  reps:'2', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger dip',      reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'1/1/1/1', move:'Bottom pulses',    reps:'8', highlight:true,  duration:32 },
+      { type:'data', timing:'4/4',     move:'Medium dip',       reps:'2', highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
+      { type:'banner', move:"Pause (no you can't)", duration:4 },
+      { type:'banner', move:'Rest to verse', duration:8 },
+      { type:'data', timing:'2/2/2/2', move:'Stagger dip',      reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'1/1/1/1', move:'Bottom pulses',    reps:'8', highlight:true,  duration:32 },
+      { type:'data', timing:'4/4',     move:'Medium dip',       reps:'2', highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
+      { type:'banner', move:"Rest (no you can't take)", duration:8 },
+      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
+      { type:'data', timing:'2/2',     move:'Single dips',      reps:'8', highlight:false, duration:32 },
+    ]
+  },
+  {
+    id: 'lunges',
+    name: 'Lunges',
+    song: 'Killing In The Name',
+    artist: 'RATM',
+    weight: '7.5kg',
+    startAt: 'Killing…',
+    totalDuration: 330,
+    moves: [
+      { type:'data', timing:'2/2',     move:'Medium lunge',       reps:'4', highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Slow stagger lunge', reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Pulse at bottom',    reps:'8', highlight:true,  duration:32 },
+      { type:'data', timing:'4/4/4/4', move:'Slow stagger hold',  reps:'3', highlight:false, duration:48 },
+      { type:'data', timing:'4/4',     move:'Slow lunge', cue:'(switch sides last 2)', reps:'2', highlight:false, duration:16 },
+      { type:'data', timing:'2/2/2/2', move:'Slow stagger lunge', reps:'4', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Pulse at bottom',    reps:'8', highlight:true,  duration:32 },
+      { type:'data', timing:'4/4/4/4', move:'Slow stagger hold',  reps:'3', highlight:false, duration:48 },
+      { type:'data', timing:'4/4',     move:'Slow lunge',         reps:'4', highlight:false, duration:32 },
+      { type:'banner', move:'Reset and rest for solo', duration:8 },
+      { type:'data', timing:'4/4',     move:'Ankle raises', cue:'(f u)', reps:'8', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Fwd alt step lunge', reps:'6', highlight:false, duration:48 },
+    ]
+  },
+  {
+    id: 'shoulders',
+    name: 'Shoulders',
+    song: 'Break Stuff',
+    artist: 'Limp Bizkit',
+    weight: '2.5kg',
+    startAt: 'Days',
+    totalDuration: 200,
+    moves: [
+      { type:'data', timing:'4/4', move:'Lateral raise',           reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
+      { type:'data', timing:'4/4', move:'Lateral raise',           reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
+      { type:'banner', move:"Rest for talking to 'chainsaw'", duration:16 },
+      { type:'data', timing:'4/4', move:'Down and fly',            reps:'3',  highlight:false, duration:24 },
+      { type:'data', timing:'1/3', move:'Fast up slow down lat',   reps:'12', highlight:false, duration:48 },
+      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
+    ]
+  },
+  {
+    id: 'abs',
+    name: 'Abs',
+    song: 'More Human Than Human',
+    artist: 'White Zombie',
+    weight: 'None',
+    startAt: 'Guitars',
+    totalDuration: 290,
+    moves: [
+      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
+      { type:'banner', move:'Hold to verse', duration:8 },
+      { type:'data', timing:'4/4', move:'Dead bugs',         reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'1/1', move:'Crunch pulse', cue:'(yeah)', reps:'8', highlight:true, duration:16 },
+      { type:'data', timing:'2/2', move:'Bicycles',          reps:'12', highlight:false, duration:24 },
+      { type:'banner', move:'Hold', duration:8 },
+      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'4/4', move:'Dead bugs',         reps:'4',  highlight:false, duration:32 },
+      { type:'data', timing:'1/1', move:'Crunch pulse', cue:'(yeah)', reps:'8', highlight:true, duration:16 },
+      { type:'data', timing:'2/2', move:'Bicycles',          reps:'12', highlight:false, duration:24 },
+      { type:'banner', move:'Hold', duration:8 },
+      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
+      { type:'banner', move:'Flip over for plank', duration:4 },
+      { type:'data', timing:'—',   move:'Plank', cue:'(to vocals end)', reps:'', highlight:false, duration:32 },
+      { type:'data', timing:'1/1', move:'Mountain climbers', cue:'(to end)', reps:'16', highlight:true, duration:32 },
+    ]
+  },
+  {
+    id: 'cooldown',
+    name: 'Cooldown',
+    song: 'In The End',
+    artist: 'Linkin Park',
+    weight: 'None',
+    startAt: 'Vocal',
+    totalDuration: 220,
+    isCooldown: true,
+    moves: [
+      { type:'data',   move:'Slow stretch and thread needle', duration:24 },
+      { type:'banner', move:'Repeat other side', duration:4 },
+      { type:'banner', move:'Chorus — cat cows', duration:16 },
+      { type:'data',   move:'Runners lunge and tricep stretch', cue:"(swap arm 'tried so hard')", duration:24 },
+      { type:'data',   move:'Lean back', cue:"('got so far')", duration:8 },
+      { type:'banner', move:'Swap legs for chorus', duration:4 },
+      { type:'data',   move:'Runners lunge and chest stretch', duration:16 },
+      { type:'data',   move:'Lean back', cue:"('I had to fall')", duration:8 },
+      { type:'banner', move:'Pigeon first side until chorus', duration:32 },
+      { type:'banner', move:'Swap legs — chorus', duration:16 },
+      { type:'data',   move:'Forward fold and stretch', duration:24 },
+    ]
+  }
+];
+
+function updateNextMoveCountdown() {
+  const track = TRACKS[currentTrackIdx];
+  const el = document.getElementById('next-move-countdown');
+
+  // Find the next move timestamp
+  const nextMoveIdx = currentMoveIdx + 1;
+  if (nextMoveIdx >= moveTimestamps.length) {
+    hideNextMoveCountdown();
+    return;
+  }
+
+  const nextStartsAt = moveTimestamps[nextMoveIdx];
+  const secsUntil = nextStartsAt - elapsed;
+
+  if (secsUntil > 0 && secsUntil <= 5) {
+    const nextMove = track.moves[nextMoveIdx];
+    // Skip banners — look for next actual data move name
+    let label = nextMove.move;
+
+    document.getElementById('nmc-move').textContent = label;
+    document.getElementById('nmc-secs').textContent =
+      secsUntil === 1 ? '1 second' : `${secsUntil} seconds`;
+    el.classList.add('visible');
+  } else {
+    hideNextMoveCountdown();
+  }
+}
+
+function hideNextMoveCountdown() {
+  document.getElementById('next-move-countdown').classList.remove('visible');
+}
+
+// ─────────────────────────────────────────────
+// PERSISTENCE — save/load calibrated durations
+// via localStorage so they survive page refresh
+// ─────────────────────────────────────────────
+const STORAGE_KEY = 'nmbp_calibrations';
+
+function saveCalibrations() {
+  try {
+    const data = {};
+    TRACKS.forEach(t => {
+      data[t.id] = {
+        totalDuration: t.totalDuration,
+        introOffset: t.introOffset || 0,
+        durations: t.moves.map(m => m.duration)
+      };
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e) { /* storage unavailable — silent fail */ }
+}
+
+function loadCalibrations() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    TRACKS.forEach(t => {
+      if (data[t.id]) {
+        t.totalDuration = data[t.id].totalDuration;
+        if (data[t.id].introOffset !== undefined) {
+          t.introOffset = data[t.id].introOffset;
+        }
+        data[t.id].durations.forEach((d, i) => {
+          if (t.moves[i]) t.moves[i].duration = d;
+        });
+      }
+    });
+  } catch(e) { /* corrupt storage — ignore */ }
+}
+let currentTrackIdx = 0;
+let currentMoveIdx  = -1;
+let elapsed = 0;       // seconds elapsed in track
+let playing = false;
+let timer = null;
+let moveTimestamps = []; // cumulative start time for each move
+
+// ─────────────────────────────────────────────
+// INIT TRACK SELECT
+// ─────────────────────────────────────────────
+function buildTrackSelect() {
+  const grid = document.getElementById('track-grid');
+  TRACKS.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'track-card';
+    card.innerHTML = `
+      <div class="track-card-num">${String(i+1).zfill ? String(i+1).padStart(2,'0') : (i+1).toString().padStart(2,'0')} / ${TRACKS.length}</div>
+      <div class="track-card-name">${t.name}</div>
+      <div class="track-card-song">${t.song} — ${t.artist}</div>
+    `;
+    card.onclick = () => loadTrack(i);
+    grid.appendChild(card);
+  });
+}
+
+function showTrackSelect() {
+  stopTrack();
+  document.getElementById('track-select').classList.remove('hidden');
+}
+
+// ─────────────────────────────────────────────
+// LOAD TRACK
+// ─────────────────────────────────────────────
+function loadTrack(idx) {
+  document.getElementById('track-select').classList.add('hidden');
+  currentTrackIdx = idx;
+  currentMoveIdx  = -1;
+  elapsed = 0;
+  playing = false;
+  clearInterval(timer);
+
+  const track = TRACKS[idx];
+
+  // Compute move timestamps — offset by intro if calibrated
+  moveTimestamps = [];
+  let t = track.introOffset || 0;
+  track.moves.forEach(m => {
+    moveTimestamps.push(t);
+    t += m.duration;
+  });
+
+  // Header
+  document.getElementById('track-name').textContent = track.name.toUpperCase();
+  document.getElementById('song-info').textContent = `${track.song} — ${track.artist}`;
+  document.getElementById('btn-play').textContent = 'PLAY';
+
+  // Meta strip
+  const meta = document.getElementById('track-meta-strip');
+  meta.innerHTML = `
+    <div class="meta-item">Weight <span>${track.weight}</span></div>
+    <div class="meta-item">Start at <span>${track.startAt}</span></div>
+    <div class="meta-item">Moves <span>${track.moves.length}</span></div>
+  `;
+
+  // Show/hide header columns for cooldown
+  const headerRow = document.querySelector('.row-header');
+  if (track.isCooldown) {
+    headerRow.style.display = 'none';
+    document.querySelector('.track-meta').style.gridTemplateColumns = '1fr';
+  } else {
+    headerRow.style.display = 'grid';
+  }
+
+  // Build rows
+  const container = document.getElementById('rows-container');
+  container.innerHTML = '';
+  track.moves.forEach((m, i) => {
+    const row = document.createElement('div');
+    row.className = 'row' + (m.type === 'banner' ? ' banner' : '') + (m.highlight ? ' highlight' : '');
+    row.id = `row-${i}`;
+
+    if (m.type === 'banner') {
+      row.innerHTML = `<div class="cell cell-banner">${m.move}</div>`;
+    } else if (track.isCooldown) {
+      row.style.gridTemplateColumns = '1fr';
+      row.innerHTML = `<div class="cell cell-move">${m.move}${m.cue ? `<div class="cell-cue">${m.cue}</div>` : ''}</div>`;
+    } else {
+      row.innerHTML = `
+        <div class="cell cell-timing">${m.timing || ''}</div>
+        <div class="cell cell-move">${m.move}${m.cue ? `<div class="cell-cue">${m.cue}</div>` : ''}</div>
+        <div class="cell cell-reps">${m.reps || ''}</div>
+      `;
+    }
+    container.appendChild(row);
+  });
+
+  // Progress dots
+  buildDots();
+  updateDots();
+  updateClock();
+  updateProgressBar();
+  scrollToMove(-1);
+}
+
+// ─────────────────────────────────────────────
+// PROGRESS DOTS
+// ─────────────────────────────────────────────
+function buildDots() {
+  const dotsEl = document.getElementById('progress-dots');
+  dotsEl.innerHTML = '';
+  TRACKS.forEach((t, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.setAttribute('data-label', t.name);
+    d.onclick = () => loadTrack(i);
+    dotsEl.appendChild(d);
+  });
+}
+
+function updateDots() {
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach((d, i) => {
+    d.className = 'dot';
+    if (i < currentTrackIdx) d.classList.add('done');
+    else if (i === currentTrackIdx) d.classList.add('active');
+  });
+}
+
+// ─────────────────────────────────────────────
+// PLAY / PAUSE
+// ─────────────────────────────────────────────
+function togglePlay() {
+  if (playing) {
+    pauseTrack();
+  } else {
+    if (currentMoveIdx === -1) {
+      startCountdown();
+    } else {
+      playTrack();
+    }
+  }
+}
+
+function startCountdown() {
+  const overlay = document.getElementById('countdown-overlay');
+  const numEl   = document.getElementById('countdown-num');
+  overlay.classList.remove('hidden');
+  let count = 3;
+  numEl.textContent = count;
+
+  const cd = setInterval(() => {
+    count--;
+    if (count <= 0) {
+      clearInterval(cd);
+      overlay.classList.add('hidden');
+      playTrack();
+    } else {
+      numEl.textContent = count;
+    }
+  }, 1000);
+}
+
+function playTrack() {
+  playing = true;
+  document.getElementById('btn-play').textContent = 'PAUSE';
+  timer = setInterval(tick, 1000);
+  requestWakeLock();
+}
+
+function pauseTrack() {
+  playing = false;
+  document.getElementById('btn-play').textContent = 'PLAY';
+  clearInterval(timer);
+  hideNextMoveCountdown();
+}
+
+function stopTrack() {
+  pauseTrack();
+  currentMoveIdx = -1;
+  elapsed = 0;
+}
+
+function restartTrack() {
+  stopTrack();
+  loadTrack(currentTrackIdx);
+}
+
+// ─────────────────────────────────────────────
+// TICK
+// ─────────────────────────────────────────────
+function tick() {
+  elapsed++;
+  const track = TRACKS[currentTrackIdx];
+
+  // In calibration mode, just update the clock — don't auto-advance rows
+  if (calibMode) {
+    updateClock();
+    return;
+  }
+
+  // Find current move
+  let newIdx = -1;
+  for (let i = 0; i < moveTimestamps.length; i++) {
+    if (elapsed >= moveTimestamps[i]) newIdx = i;
+    else break;
+  }
+
+  if (newIdx !== currentMoveIdx) {
+    currentMoveIdx = newIdx;
+    scrollToMove(currentMoveIdx);
+    hideNextMoveCountdown();
+  }
+
+  // Show countdown 3 seconds before next move
+  updateNextMoveCountdown();
+
+  updateClock();
+  updateProgressBar();
+
+  // Auto-advance to next track
+  if (elapsed >= track.totalDuration) {
+    pauseTrack();
+    if (currentTrackIdx < TRACKS.length - 1) {
+      setTimeout(() => loadTrack(currentTrackIdx + 1), 1500);
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// SCROLL TO MOVE
+// ─────────────────────────────────────────────
+function scrollToMove(idx) {
+  // Remove active/next from all
+  document.querySelectorAll('.row').forEach(r => {
+    r.classList.remove('active', 'next');
+  });
+
+  if (idx >= 0) {
+    const activeRow = document.getElementById(`row-${idx}`);
+    if (activeRow) {
+      activeRow.classList.add('active');
+
+      // Mark next (skip banners for "next" styling)
+      for (let j = idx + 1; j < TRACKS[currentTrackIdx].moves.length; j++) {
+        const nextRow = document.getElementById(`row-${j}`);
+        if (nextRow && !nextRow.classList.contains('banner')) {
+          nextRow.classList.add('next');
+          break;
+        }
+      }
+
+      // Scroll so active row is ~25% from top of container
+      const container = document.getElementById('scroll-container');
+      const scrollTrack = document.getElementById('scroll-track');
+      const containerH = container.clientHeight;
+      const rowTop = activeRow.offsetTop;
+      const targetScroll = rowTop - containerH * 0.25;
+
+      scrollTrack.style.transform = `translateY(${-Math.max(0, targetScroll)}px)`;
+    }
+  } else {
+    document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+  }
+}
+
+// ─────────────────────────────────────────────
+// UI UPDATES
+// ─────────────────────────────────────────────
+function updateClock() {
+  const m = Math.floor(elapsed / 60);
+  const s = elapsed % 60;
+  document.getElementById('clock').textContent = `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function updateProgressBar() {
+  const track = TRACKS[currentTrackIdx];
+  let pct = 0;
+
+  if (currentMoveIdx >= 0 && currentMoveIdx < moveTimestamps.length) {
+    const moveStart = moveTimestamps[currentMoveIdx];
+    const moveEnd = moveTimestamps[currentMoveIdx + 1] !== undefined
+      ? moveTimestamps[currentMoveIdx + 1]
+      : moveStart + track.moves[currentMoveIdx].duration;
+    const moveDur = moveEnd - moveStart;
+    if (moveDur > 0) {
+      pct = Math.min(100, ((elapsed - moveStart) / moveDur) * 100);
+    }
+  }
+
+  document.getElementById('song-progress-fill').style.width = pct + '%';
+}
+
+function updateNextUp() {
+  const track = TRACKS[currentTrackIdx];
+  const chip = document.getElementById('next-up');
+  const nextText = document.getElementById('next-up-text');
+
+  // Find next data row
+  let next = null;
+  for (let j = currentMoveIdx + 1; j < track.moves.length; j++) {
+    if (track.moves[j].type !== 'banner') {
+      next = track.moves[j];
+      break;
+    }
+  }
+
+  if (next) {
+    chip.style.display = 'block';
+    nextText.textContent = next.move;
+  } else {
+    chip.style.display = 'none';
+  }
+}
+
+// ─────────────────────────────────────────────
+// MANUAL EDIT MODE
+// Reveals a seconds input on every row so you
+// can tweak durations without recalibrating
+// ─────────────────────────────────────────────
+let editMode = false;
+
+function startEditMode() {
+  if (playing) pauseTrack();
+  editMode = true;
+  document.body.classList.add('editing');
+  document.getElementById('btn-edit').textContent = '✕ Exit edit';
+  document.getElementById('btn-edit').onclick = stopEditMode;
+  document.getElementById('btn-play').disabled = true;
+  document.getElementById('btn-calib').disabled = true;
+
+  const track = TRACKS[currentTrackIdx];
+
+  // Set intro offset input
+  const introInput = document.getElementById('edit-intro-input');
+  introInput.value = track.introOffset || 0;
+  document.getElementById('edit-intro-label').textContent =
+    `(currently ${track.introOffset || 0}s)`;
+
+  // Add duration input to every row
+  track.moves.forEach((m, i) => {
+    const row = document.getElementById(`row-${i}`);
+    if (!row) return;
+    let editDiv = row.querySelector('.edit-dur');
+    if (!editDiv) {
+      editDiv = document.createElement('div');
+      editDiv.className = 'edit-dur';
+      editDiv.innerHTML = `
+        <label>secs</label>
+        <input type="number" min="1" max="999" data-idx="${i}" value="${m.duration}"
+          oninput="previewEditRow(${i}, this.value)">
+      `;
+      row.appendChild(editDiv);
+    } else {
+      editDiv.querySelector('input').value = m.duration;
+    }
+  });
+}
+
+function previewEditRow(idx, val) {
+  // Just visual feedback — not applied until Save
+  const row = document.getElementById(`row-${idx}`);
+  if (row) row.style.outline = val > 0 ? '1px solid #ffaa00' : '';
+}
+
+function applyEditChanges() {
+  // Update the intro label live as user types
+  const val = parseInt(document.getElementById('edit-intro-input').value) || 0;
+  document.getElementById('edit-intro-label').textContent = `(currently ${val}s)`;
+}
+
+function saveEditChanges() {
+  const track = TRACKS[currentTrackIdx];
+
+  // Read intro offset
+  const newIntro = parseInt(document.getElementById('edit-intro-input').value) || 0;
+  track.introOffset = newIntro;
+
+  // Read all row durations
+  track.moves.forEach((m, i) => {
+    const row = document.getElementById(`row-${i}`);
+    if (!row) return;
+    const input = row.querySelector('.edit-dur input');
+    if (input) {
+      const val = parseInt(input.value);
+      if (val > 0) m.duration = val;
+    }
+  });
+
+  // Recompute totalDuration
+  track.totalDuration = track.introOffset +
+    track.moves.reduce((sum, m) => sum + m.duration, 0);
+
+  saveCalibrations();
+  stopEditMode();
+}
+
+function stopEditMode() {
+  editMode = false;
+  document.body.classList.remove('editing');
+  document.getElementById('btn-edit').textContent = '✏️ Edit';
+  document.getElementById('btn-edit').onclick = startEditMode;
+  document.getElementById('btn-play').disabled = false;
+  document.getElementById('btn-calib').disabled = false;
+
+  // Remove outlines
+  document.querySelectorAll('.row').forEach(r => r.style.outline = '');
+
+  // Rebuild move timestamps with updated values
+  const track = TRACKS[currentTrackIdx];
+  moveTimestamps = [];
+  let t = track.introOffset || 0;
+  track.moves.forEach(m => { moveTimestamps.push(t); t += m.duration; });
+}
+
+// ─────────────────────────────────────────────
+// CALIBRATION MODE
+// ─────────────────────────────────────────────
+let calibMode = false;
+let calibTaps = [];
+let calibMoveIdx = 0;
+let calibCountdownTimer = null;
+
+function startCalibration() {
+  // Confirm first if any track has been calibrated
+  const hasCalib = localStorage.getItem(STORAGE_KEY);
+  if (hasCalib) {
+    const ok = confirm(
+      'This will overwrite the saved timestamps for ' +
+      TRACKS[currentTrackIdx].name +
+      '. Are you sure?'
+    );
+    if (!ok) return;
+  }
+
+  // Stop everything cleanly first
+  clearInterval(timer);
+  clearInterval(calibCountdownTimer);
+  pauseTrack();
+
+  calibMode = true;
+  calibTaps = [];
+  calibMoveIdx = -1;  // -1 = waiting for first move start tap
+  calibIntroOffset = 0;
+
+  // ── Wipe existing timestamps so the track doesn't auto-scroll ──
+  // Set all durations to a huge number so nothing fires during calibration
+  const track = TRACKS[currentTrackIdx];
+  moveTimestamps = track.moves.map(() => 999999);
+  elapsed = 0;
+  currentMoveIdx = -1;
+
+  // Reset the display
+  document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+  document.querySelectorAll('.row').forEach(r => r.classList.remove('active', 'next'));
+  updateClock();
+  updateProgressBar();
+
+  document.body.classList.add('calibrating');
+  document.getElementById('calib-bar').classList.add('visible');
+  document.getElementById('calib-save-btn').classList.remove('visible');
+  document.getElementById('btn-play').disabled = true;
+  document.getElementById('btn-calib').textContent = '✕ Exit';
+  document.getElementById('btn-calib').onclick = stopCalibration;
+
+  // Reset/add calib stamp badges on rows
+  document.querySelectorAll('.row').forEach(r => {
+    let stamp = r.querySelector('.calib-stamp');
+    if (!stamp) {
+      stamp = document.createElement('div');
+      stamp.className = 'calib-stamp';
+      r.appendChild(stamp);
+    }
+    stamp.textContent = '—';
+  });
+
+  // Disable button, start 5 second countdown
+  const nextBtn = document.getElementById('calib-next-btn');
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Starting in 5…';
+  document.getElementById('calib-label').innerHTML =
+    '🎯 Get Deezer ready — <strong id="calib-move-name">starting in 5…</strong>';
+
+  let count = 5;
+  calibCountdownTimer = setInterval(() => {
+    count--;
+    if (count <= 0) {
+      clearInterval(calibCountdownTimer);
+      // Start the clock — but tick() won't auto-advance because moveTimestamps are all 999999
+      playing = true;
+      timer = setInterval(tick, 1000);
+      requestWakeLock();
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'FIRST MOVE START ▶';
+      document.getElementById('calib-label').innerHTML =
+        '🎯 Tap when the <strong id="calib-move-name">first move begins</strong>';
+    } else {
+      nextBtn.textContent = `Starting in ${count}…`;
+      document.getElementById('calib-label').innerHTML =
+        `🎯 Get Deezer ready — <strong id="calib-move-name">starting in ${count}…</strong>`;
+    }
+  }, 1000);
+}
+
+function stopCalibration() {
+  clearInterval(calibCountdownTimer);
+  calibMode = false;
+  pauseTrack();
+  document.body.classList.remove('calibrating');
+  document.getElementById('calib-bar').classList.remove('visible');
+  document.getElementById('btn-play').disabled = false;
+  document.getElementById('btn-calib').textContent = '🎯 Calibrate';
+  document.getElementById('btn-calib').onclick = startCalibration;
+  // Restore real timestamps including intro offset
+  const track = TRACKS[currentTrackIdx];
+  moveTimestamps = [];
+  let t = track.introOffset || 0;
+  track.moves.forEach(m => { moveTimestamps.push(t); t += m.duration; });
+  elapsed = 0;
+  currentMoveIdx = -1;
+  playing = false;
+  document.getElementById('btn-play').textContent = 'PLAY';
+  document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+  document.querySelectorAll('.row').forEach(r => r.classList.remove('active', 'next'));
+  updateClock();
+  updateProgressBar();
+}
+
+let calibIntroOffset = 0; // elapsed time when first move started
+
+function calibTap() {
+  const track = TRACKS[currentTrackIdx];
+  const tapTime = elapsed;
+  const nextBtn = document.getElementById('calib-next-btn');
+
+  // First tap = marks when the first move begins (end of intro)
+  if (calibMoveIdx === -1) {
+    calibIntroOffset = tapTime; // record intro length
+    calibMoveIdx = 0;
+
+    // Highlight first row
+    const firstRow = document.getElementById('row-0');
+    if (firstRow) firstRow.classList.add('active');
+
+    nextBtn.textContent = 'NEXT MOVE ▶';
+    document.getElementById('calib-label').innerHTML =
+      '🎯 Tap when each move ends — <strong id="calib-move-name"></strong>';
+    updateCalibLabel();
+    return;
+  }
+
+  // Subsequent taps = marks end of current move
+  // Store time relative to intro offset so move 0 starts at 0
+  const moveTime = tapTime - calibIntroOffset;
+  calibTaps.push(moveTime);
+
+  // Stamp the row we just finished
+  const rowEl = document.getElementById(`row-${calibMoveIdx}`);
+  if (rowEl) {
+    const stamp = rowEl.querySelector('.calib-stamp');
+    const m = Math.floor(moveTime / 60);
+    const s = moveTime % 60;
+    if (stamp) stamp.textContent = `▶ ${m}:${String(s).padStart(2,'0')}`;
+    rowEl.classList.remove('active');
+  }
+
+  calibMoveIdx++;
+
+  if (calibMoveIdx < track.moves.length) {
+    // Highlight next row and scroll to it
+    const nextRow = document.getElementById(`row-${calibMoveIdx}`);
+    if (nextRow) {
+      nextRow.classList.add('active');
+      const container = document.getElementById('scroll-container');
+      const containerH = container.clientHeight;
+      const rowTop = nextRow.offsetTop;
+      const targetScroll = rowTop - containerH * 0.25;
+      document.getElementById('scroll-track').style.transform =
+        `translateY(${-Math.max(0, targetScroll)}px)`;
+    }
+    updateCalibLabel();
+  } else {
+    // All moves done
+    pauseTrack();
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Done ✓';
+    document.getElementById('calib-save-btn').classList.add('visible');
+    document.getElementById('calib-label').innerHTML =
+      '✅ All moves marked — <strong>tap Save when ready</strong>';
+  }
+}
+
+function updateCalibLabel() {
+  const track = TRACKS[currentTrackIdx];
+  if (calibMoveIdx < track.moves.length) {
+    const move = track.moves[calibMoveIdx];
+    const label = move.type === 'banner'
+      ? `[banner] ${move.move}`
+      : `${move.timing || '—'} · ${move.move}`;
+    const nameEl = document.getElementById('calib-move-name');
+    if (nameEl) nameEl.textContent = `${calibMoveIdx + 1}/${track.moves.length}: ${label}`;
+  }
+}
+
+function finishCalibration() {
+  const track = TRACKS[currentTrackIdx];
+
+  // calibTaps[i] = seconds since first move started when move i ended
+  // move 0 starts at 0, move i starts at calibTaps[i-1]
+  const newDurations = track.moves.map((m, i) => {
+    const start = i === 0 ? 0 : (calibTaps[i - 1] || 0);
+    const end   = calibTaps[i] !== undefined ? calibTaps[i] : start + m.duration;
+    return Math.max(1, end - start);
+  });
+
+  // Total duration includes the intro so playback timer aligns with song start
+  const movesTotal = calibTaps.length > 0 ? calibTaps[calibTaps.length - 1] : track.totalDuration;
+  const newTotal = calibIntroOffset + movesTotal;
+
+  let lines = [];
+  lines.push(`// ── ${track.name.toUpperCase()} — Calibrated timestamps ──`);
+  lines.push(`// totalDuration: ${newTotal}, introOffset: ${calibIntroOffset}`);
+  lines.push('');
+  track.moves.forEach((m, i) => {
+    const oldDur = m.duration;
+    const newDur = newDurations[i];
+    const changed = newDur !== oldDur ? `  ◀ was ${oldDur}` : '';
+    const label = m.type === 'banner' ? `[banner] ${m.move}` : `${m.timing || '—'} · ${m.move}`;
+    lines.push(`{ duration: ${newDur} },  // ${label}${changed}`);
+  });
+
+  document.getElementById('calib-result-track').textContent = track.name;
+  document.getElementById('calib-result-code').textContent = lines.join('\n');
+  document.getElementById('calib-result').classList.add('visible');
+
+  // Apply live — store intro offset so moveTimestamps are computed correctly
+  track.introOffset = calibIntroOffset;
+  track.moves.forEach((m, i) => { m.duration = newDurations[i]; });
+  track.totalDuration = newTotal;
+
+  // Persist to localStorage
+  saveCalibrations();
+
+  stopCalibration();
+}
+
+function copyCalibResult() {
+  const text = document.getElementById('calib-result-code').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('#calib-result .btn-primary');
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Copy to clipboard', 2000);
+  });
+}
+
+// ─────────────────────────────────────────────
+// WAKE LOCK (keeps iPad screen on)
+// ─────────────────────────────────────────────
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      document.getElementById('wake-indicator').classList.add('active');
+      wakeLock.addEventListener('release', () => {
+        document.getElementById('wake-indicator').classList.remove('active');
+      });
+    }
+  } catch (e) {
+    // Wake lock not available — silent fail
+  }
+}
+
+// Re-acquire wake lock when tab becomes visible again
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && playing) {
+    requestWakeLock();
+  }
+});
+
+// ─────────────────────────────────────────────
+// TAP ZONE — tap anywhere on the scroll area to play/pause
+// ─────────────────────────────────────────────
+function handleTapZone() {
+  // Only active once a track is loaded and playing has started
+  if (currentMoveIdx >= 0 || playing) {
+    togglePlay();
+  }
+}
+
+// ─────────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  if (e.code === 'ArrowRight' && currentTrackIdx < TRACKS.length - 1) loadTrack(currentTrackIdx + 1);
+  if (e.code === 'ArrowLeft' && currentTrackIdx > 0) loadTrack(currentTrackIdx - 1);
+  if (e.code === 'KeyR') restartTrack();
+  if (e.code === 'Escape') showTrackSelect();
+});
+
+// ─────────────────────────────────────────────
+// START
+// ─────────────────────────────────────────────
+loadCalibrations(); // restore any previously saved timings
+buildTrackSelect();
+loadTrack(0);
+document.getElementById('track-select').classList.remove('hidden');
+</script>
+
+</body>
+</html>
