@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,8 +6,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="BodyPump">
-<title>Nu Metal BodyPump</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="icon.png">
+<title>BodyPump</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Metal+Mania&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Metal Mania';
+    src: url('MetalMania-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+</style>
 <style>
   :root {
     --bg: #0a0a0a;
@@ -26,804 +37,951 @@
     --active-border: #c0392b;
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘Barlow’, sans-serif;
-height: 100vh;
-height: 100dvh;
-overflow: hidden;
-display: flex;
-flex-direction: column;
-padding-left: env(safe-area-inset-left);
-padding-right: env(safe-area-inset-right);
-padding-bottom: env(safe-area-inset-bottom);
--webkit-text-size-adjust: 100%;
-text-size-adjust: 100%;
-touch-action: manipulation;
-}
-
-/* ── WAKE LOCK INDICATOR ── */
-#wake-indicator {
-width: 7px; height: 7px;
-border-radius: 50%;
-background: #333;
-flex-shrink: 0;
-transition: background 0.3s;
-}
-#wake-indicator.active { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
-
-/* ── BIG TAP ZONE ── */
-#tap-zone {
-position: absolute;
-inset: 0;
-z-index: 10;
-}
-
-/* ── HEADER ── */
-#header {
-display: flex;
-align-items: center;
-padding: 6px 14px;
-padding-top: max(6px, env(safe-area-inset-top));
-background: var(–surface);
-border-bottom: 2px solid var(–accent2);
-flex-shrink: 0;
-gap: 8px;
-position: relative;
-z-index: 20;
-flex-wrap: nowrap;
-min-height: 0;
-}
-
-#track-info {
-display: flex;
-flex-direction: column;
-min-width: 0;
-flex: 1;
-overflow: hidden;
-}
-
-#track-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-letter-spacing: 2px;
-color: var(–text);
-line-height: 1;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-#song-info {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-color: var(–text-dim);
-letter-spacing: 1px;
-text-transform: uppercase;
-margin-top: 1px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-/* Dots moved to sub-bar below header */
-#progress-dots {
-display: flex;
-gap: 5px;
-align-items: center;
-flex-shrink: 0;
-}
-
-.dot {
-width: 8px;
-height: 8px;
-border-radius: 50%;
-background: var(–border);
-border: 1px solid #333;
-transition: all 0.3s ease;
-cursor: pointer;
-position: relative;
-padding: 6px;
-margin: -6px;
-background-clip: content-box;
-}
-.dot:hover::after {
-content: attr(data-label);
-position: absolute;
-bottom: 18px;
-left: 50%;
-transform: translateX(-50%);
-background: #222;
-color: var(–text);
-font-size: 10px;
-white-space: nowrap;
-padding: 3px 6px;
-border-radius: 3px;
-font-family: ‘Barlow Condensed’, sans-serif;
-letter-spacing: 0.5px;
-pointer-events: none;
-}
-.dot.done { background: var(–accent2); border-color: var(–accent2); background-clip: content-box; }
-.dot.active { background: var(–accent); border-color: var(–accent); box-shadow: 0 0 6px var(–accent); width: 10px; height: 10px; background-clip: content-box; }
-
-#clock {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-color: var(–accent);
-letter-spacing: 2px;
-min-width: 52px;
-text-align: right;
-flex-shrink: 0;
-}
-
-/* ── CONTROLS ── */
-#controls {
-display: flex;
-gap: 5px;
-align-items: center;
-flex-shrink: 0;
-}
-
-.btn {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 1px;
-text-transform: uppercase;
-padding: 5px 10px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-transition: all 0.15s;
-min-height: 32px;
-min-width: 32px;
-white-space: nowrap;
-}
-.btn-primary {
-background: var(–accent);
-color: white;
-padding: 5px 16px;
-font-size: 13px;
-}
-.btn-primary:hover { background: #e74c3c; }
-.btn-secondary {
-background: transparent;
-color: var(–text-dim);
-border: 1px solid #333;
-font-size: 14px;
-}
-.btn-secondary:hover { border-color: var(–text-dim); color: var(–text); }
-.btn-ghost {
-background: transparent;
-color: var(–text-dim);
-font-size: 14px;
-padding: 4px 8px;
-}
-.btn-ghost:hover { color: var(–text); }
-
-/* ── SUB-BAR (dots + clock under header) ── */
-#sub-bar {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 4px 14px;
-background: #0a0a0a;
-border-bottom: 1px solid var(–border);
-flex-shrink: 0;
-}
-
-/* ── MAIN SCROLL AREA ── */
-#scroll-container {
-flex: 1;
-overflow: hidden;
-position: relative;
-}
-
-#scroll-track {
-transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-padding: 0 0 60vh 0;
-}
-
-/* ── ROWS ── */
-.row {
-display: grid;
-grid-template-columns: 220px 1fr 90px;
-border-bottom: 1px solid var(–border);
-transition: all 0.4s ease;
-opacity: 0.35;
-position: relative;
-}
-
-.row.banner {
-grid-template-columns: 1fr;
-background: var(–banner);
-border-left: 3px solid var(–banner-border);
-opacity: 0.45;
-}
-
-.row.active {
-opacity: 1;
-background: #1a2a1a;
-border-bottom-color: #3a7a3a;
-border-left: 3px solid #4caf50;
-}
-
-.row.active.banner {
-background: #1a2a1a;
-border-left-color: #4caf50;
-border-bottom-color: #3a7a3a;
-opacity: 1;
-}
-
-.row.next {
-opacity: 0.7;
-}
-
-.cell {
-padding: 20px 24px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-}
-
-.cell-timing {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 32px;
-color: var(–text-dim);
-border-right: 1px solid var(–border);
-overflow: hidden;
-word-break: break-all;
-letter-spacing: 1px;
-}
-
-.row.active .cell-timing {
-font-size: 44px;
-color: #ffffff;
-}
-
-.cell-move {
-font-family: ‘Barlow’, sans-serif;
-font-size: 26px;
-font-weight: 600;
-color: #ffffff;
-line-height: 1.2;
-}
-
-.row.active .cell-move {
-font-size: 36px;
-font-weight: 700;
-color: #ffffff;
-}
-
-.cell-cue {
-font-size: 15px;
-font-weight: 400;
-color: var(–text-dim);
-margin-top: 4px;
-font-style: italic;
-letter-spacing: 0.5px;
-}
-
-.cell-reps {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 42px;
-color: var(–text-dim);
-text-align: center;
-border-left: 1px solid var(–border);
-letter-spacing: 1px;
-}
-
-.row.active .cell-reps {
-font-size: 64px;
-color: #4caf50;
-}
-
-.cell-banner {
-padding: 16px 24px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 20px;
-font-weight: 700;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #888;
-}
-
-.row.active .cell-banner {
-font-size: 26px;
-color: #ffffff;
-}
-
-/* ── HEADER ROW ── */
-.row-header {
-display: grid;
-grid-template-columns: 220px 1fr 90px;
-border-bottom: 2px solid var(–accent2);
-opacity: 1 !important;
-background: #0f0f0f;
-}
-
-.cell-header {
-padding: 10px 20px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: var(–text-dim);
-}
-
-.cell-header:last-child { text-align: center; }
-
-/* ── TRACK META STRIP ── */
-.track-meta {
-display: flex;
-gap: 24px;
-padding: 14px 20px;
-background: #0d0d0d;
-border-bottom: 2px solid var(–accent2);
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px;
-letter-spacing: 1px;
-text-transform: uppercase;
-}
-
-.meta-item { color: var(–text-dim); }
-.meta-item span { color: var(–text); font-weight: 600; }
-
-/* ── PROGRESS BAR ── */
-#song-progress-bar {
-height: 3px;
-background: var(–border);
-flex-shrink: 0;
-}
-#song-progress-fill {
-height: 100%;
-background: var(–accent);
-width: 0%;
-transition: width 1s linear;
-}
-
-/* ── TRACK SELECT MODAL ── */
-#track-select {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.92);
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 100;
-backdrop-filter: blur(4px);
-}
-
-#track-select.hidden { display: none; }
-
-#track-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 12px;
-max-width: 600px;
-width: 90%;
-padding: 20px;
-}
-
-#track-select h2 {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 36px;
-letter-spacing: 3px;
-color: var(–accent);
-margin-bottom: 24px;
-text-align: center;
-grid-column: 1/-1;
-}
-
-.track-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 4px;
-padding: 20px 24px;
-cursor: pointer;
-transition: all 0.2s;
-position: relative;
-overflow: hidden;
-min-height: 80px;
-}
-
-.track-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-background: var(–accent);
-transform: scaleY(0);
-transition: transform 0.2s;
-}
-
-.track-card:hover {
-border-color: var(–accent2);
-background: #161616;
-}
-.track-card:hover::before { transform: scaleY(1); }
-
-.track-card-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 11px;
-letter-spacing: 2px;
-color: var(–text-dim);
-margin-bottom: 4px;
-}
-
-.track-card-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-letter-spacing: 1px;
-color: var(–text);
-line-height: 1;
-}
-
-.track-card-song {
-font-size: 12px;
-color: var(–text-dim);
-margin-top: 4px;
-font-family: ‘Barlow Condensed’, sans-serif;
-letter-spacing: 0.5px;
-}
-
-/* ── COUNTDOWN OVERLAY ── */
-#countdown-overlay {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.85);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-z-index: 50;
-backdrop-filter: blur(2px);
-}
-#countdown-overlay.hidden { display: none; }
-
-#countdown-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 160px;
-color: var(–accent);
-line-height: 1;
-animation: pulse-num 1s ease-in-out infinite;
-}
-
-#countdown-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 18px;
-letter-spacing: 3px;
-text-transform: uppercase;
-color: var(–text-dim);
-margin-top: 8px;
-}
-
-@keyframes pulse-num {
-0%, 100% { transform: scale(1); }
-50% { transform: scale(1.06); }
-}
-
-/* ── MANUAL EDIT MODE ── */
-.row .edit-dur {
-display: none;
-position: absolute;
-right: 8px;
-top: 50%;
-transform: translateY(-50%);
-z-index: 5;
-align-items: center;
-gap: 4px;
-}
-body.editing .row .edit-dur { display: flex; }
-
-.edit-dur input {
-width: 54px;
-background: #1a1a1a;
-border: 1px solid #555;
-border-radius: 3px;
-color: #ffaa00;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-text-align: center;
-padding: 4px 6px;
--moz-appearance: textfield;
-}
-.edit-dur input::-webkit-outer-spin-button,
-.edit-dur input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.edit-dur input:focus { outline: none; border-color: #ffaa00; }
-.edit-dur label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-color: #666;
-letter-spacing: 1px;
-}
-
-#edit-intro-bar {
-display: none;
-align-items: center;
-gap: 12px;
-padding: 10px 20px;
-background: #0e0e00;
-border-bottom: 2px solid #888800;
-flex-shrink: 0;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px;
-letter-spacing: 1px;
-color: #aaa;
-}
-body.editing #edit-intro-bar { display: flex; }
-#edit-intro-bar strong { color: #ffdd00; }
-#edit-intro-bar input {
-width: 64px;
-background: #1a1a00;
-border: 1px solid #888800;
-border-radius: 3px;
-color: #ffdd00;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 16px;
-font-weight: 700;
-text-align: center;
-padding: 5px 8px;
--moz-appearance: textfield;
-}
-#edit-intro-bar input::-webkit-outer-spin-button,
-#edit-intro-bar input::-webkit-inner-spin-button { -webkit-appearance: none; }
-#edit-intro-bar input:focus { outline: none; border-color: #ffdd00; }
-
-/* ── NEXT MOVE COUNTDOWN ── */
-#next-move-countdown {
-position: fixed;
-bottom: 80px;
-left: 50%;
-transform: translateX(-50%);
-background: #1a1400;
-border: 2px solid #f0a500;
-border-radius: 6px;
-padding: 12px 28px;
-text-align: center;
-z-index: 15;
-pointer-events: none;
-opacity: 0;
-transition: opacity 0.3s ease;
-}
-#next-move-countdown.visible { opacity: 1; }
-
-#nmc-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 12px;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #f0a500;
-margin-bottom: 2px;
-}
-#nmc-move {
-font-family: ‘Barlow’, sans-serif;
-font-size: 20px;
-font-weight: 700;
-color: #ffffff;
-}
-#nmc-secs {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 13px;
-letter-spacing: 2px;
-color: #f0a500;
-margin-top: 2px;
-}
-
-/* ── CALIBRATION MODE ── */
-body.calibrating #tap-zone { pointer-events: none; }
-
-#calib-bar {
-display: none;
-align-items: center;
-gap: 12px;
-padding: 10px 20px;
-background: #1a1000;
-border-bottom: 2px solid #c87000;
-flex-shrink: 0;
-z-index: 15;
-position: relative;
-}
-#calib-bar.visible { display: flex; }
-
-#calib-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-color: #c87000;
-flex: 1;
-}
-#calib-label strong { color: #ffaa00; }
-
-#calib-next-btn {
-background: #c87000;
-color: #000;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-letter-spacing: 2px;
-padding: 10px 28px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-min-height: 52px;
-min-width: 160px;
-transition: background 0.1s;
-}
-#calib-next-btn:active { background: #ffaa00; transform: scale(0.97); }
-
-#calib-save-btn {
-background: #2ecc71;
-color: #000;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-padding: 10px 22px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-min-height: 52px;
-display: none;
-}
-#calib-save-btn.visible { display: block; }
-
-/* Calibrated rows get a small timestamp badge */
-.row .calib-stamp {
-display: none;
-position: absolute;
-top: 4px; right: 6px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-color: #c87000;
-letter-spacing: 1px;
-}
-body.calibrating .row .calib-stamp { display: block; }
-
-/* Calibration result modal */
-#calib-result {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.95);
-z-index: 200;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: flex-start;
-padding: 30px 24px;
-overflow-y: auto;
-display: none;
-}
-#calib-result.visible { display: flex; }
-#calib-result h2 {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 30px;
-letter-spacing: 3px;
-color: #ffaa00;
-margin-bottom: 8px;
-}
-#calib-result p {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-color: var(–text-dim);
-margin-bottom: 20px;
-text-align: center;
-letter-spacing: 0.5px;
-line-height: 1.5;
-}
-#calib-result pre {
-background: #111;
-border: 1px solid #333;
-border-radius: 4px;
-padding: 16px;
-font-size: 12px;
-color: #aaffaa;
-width: 100%;
-max-width: 700px;
-overflow-x: auto;
-white-space: pre-wrap;
-word-break: break-all;
-font-family: ‘Courier New’, monospace;
-line-height: 1.6;
-margin-bottom: 16px;
-}
-#calib-result .calib-actions {
-display: flex;
-gap: 12px;
-flex-wrap: wrap;
-justify-content: center;
-margin-top: 8px;
-}
-
-/* ── LANDSCAPE / LARGE SCREEN TWEAKS ── */
-@media (orientation: landscape) and (min-width: 900px) {
-.row { grid-template-columns: 240px 1fr 100px; }
-.row-header { grid-template-columns: 240px 1fr 100px; }
-.cell-timing { font-size: 34px; }
-.row.active .cell-timing { font-size: 42px; }
-.cell-move { font-size: 28px; }
-.row.active .cell-move { font-size: 40px; }
-.cell-reps { font-size: 46px; }
-.row.active .cell-reps { font-size: 70px; }
-.cell-banner { font-size: 22px; }
-.row.active .cell-banner { font-size: 28px; }
-}
-
-/* ── PORTRAIT / SMALL SCREEN ── */
-@media (max-width: 600px) {
-.row { grid-template-columns: 140px 1fr 70px; }
-.row-header { grid-template-columns: 140px 1fr 70px; }
-#track-name { font-size: 22px; }
-#song-info { font-size: 11px; }
-#progress-dots { display: none; }
-#clock { font-size: 24px; }
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  /* ── WAKE LOCK INDICATOR ── */
+  #wake-indicator {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #333;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  #wake-indicator.active { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
+
+  /* ── BIG TAP ZONE ── */
+  #tap-zone {
+    display: none;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent2);
+    flex-shrink: 0;
+    gap: 8px;
+    position: relative;
+    z-index: 20;
+  }
+
+  #track-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #controls-centre {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #track-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--text);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #song-info {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Dots moved to sub-bar below header */
+  #progress-dots {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    background-clip: content-box;
+    flex-shrink: 0;
+  }
+  .dot:hover::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: var(--text);
+    font-size: 10px;
+    white-space: nowrap;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+  .dot.done { background: var(--accent2); border-color: var(--accent2); }
+  .dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px var(--accent); width: 12px; height: 12px; }
+
+  #clock {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    min-width: 70px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── CONTROLS ── */
+  #controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-height: 40px;
+    min-width: 40px;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 10px 40px;
+    font-size: 20px;
+    min-height: 56px;
+  }
+  .btn-primary:hover { background: #e74c3c; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid #333;
+    font-size: 18px;
+    min-height: 48px;
+    min-width: 48px;
+  }
+  .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+  .btn-ghost:hover { color: var(--text); }
+
+  /* ── SUB-BAR (dots + meta + clock) ── */
+  #sub-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px 18px;
+    background: #0a0a0a;
+    border-bottom: 2px solid var(--accent2);
+    flex-shrink: 0;
+  }
+
+  #sub-bar-meta {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  #sub-bar-meta .meta-item { color: var(--text-dim); white-space: nowrap; }
+  #sub-bar-meta .meta-item span { color: var(--text); font-weight: 600; }
+
+  /* ── MAIN SCROLL AREA ── */
+  #scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  #scroll-track {
+    padding: 0 0 60vh 0;
+  }
+
+  /* ── ROWS ── */
+  .row {
+    display: grid;
+    grid-template-columns: 220px 1fr 90px;
+    border-bottom: 1px solid #111111;
+    transition: all 0.4s ease;
+    opacity: 0.35;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .row.banner {
+    grid-template-columns: 1fr;
+    background: var(--banner);
+    border-left: 3px solid var(--banner-border);
+    opacity: 0.45;
+  }
+
+  .row.active {
+    opacity: 1;
+    background: #1a2a1a;
+    border-bottom-color: #3a7a3a;
+    border-left: 3px solid #4caf50;
+  }
+
+  .row.active.banner {
+    background: #1a2a1a;
+    border-left-color: #4caf50;
+    border-bottom-color: #3a7a3a;
+    opacity: 1;
+  }
+
+  .row.next {
+    opacity: 0.7;
+  }
+
+  .cell {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cell-timing {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    word-break: break-word;
+  }
+
+  .row.active .cell-timing {
+    font-size: 44px;
+    color: #ffffff;
+  }
+
+  .cell-move {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+
+  .row.active .cell-move {
+    font-size: 44px;
+    color: #ffffff;
+  }
+
+  .cell-cue {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
+
+  .cell-reps {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .row.active .cell-reps {
+    font-size: 64px;
+    color: #4caf50;
+  }
+
+  .cell-banner {
+    padding: 16px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .row.active .cell-banner {
+    font-size: 26px;
+    color: #ffffff;
+  }
+
+  /* ── HEADER ROW ── */
+  .row-header {
+    display: grid;
+    grid-template-columns: 220px 1fr 90px;
+    border-bottom: 2px solid var(--accent2);
+    opacity: 1 !important;
+    background: #0f0f0f;
+  }
+
+  .cell-header {
+    padding: 12px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .cell-header:last-child { text-align: center; }
+
+  .meta-item { color: var(--text-dim); }
+  .meta-item span { color: var(--text); font-weight: 600; }
+
+  /* ── PROGRESS BAR ── */
+  #song-progress-bar {
+    height: 3px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  #song-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 1s linear;
+  }
+
+  /* ── TRACK SELECT MODAL ── */
+  .calib-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.9;
+  }
+
+  /* ── ROUTINE MENU ── */
+  #routine-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 110;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
+  }
+  #routine-menu.hidden { display: none; }
+  #routine-menu-inner {
+    width: min(700px, 95vw);
+    padding: 20px 0;
+  }
+  #routine-menu-inner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    margin: 0 0 4px;
+    text-align: center;
+  }
+  #routine-subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  #routine-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 12px;
+  }
+  .routine-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .routine-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+  .routine-card:hover { border-color: var(--accent2); background: #161616; }
+  .routine-card:hover::before { transform: scaleY(1); }
+  .routine-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .routine-card-meta {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  #track-select {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
+  }
+
+  #track-select.hidden { display: none; }
+
+  #track-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    width: 90%;
+    padding: 20px;
+  }
+
+  #track-select h2 {
+    margin: 0;
+    text-align: center;
+    flex: 1;
+  }
+  #track-select-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 4px;
+    text-align: center;
+    grid-column: 1/-1;
+  }
+
+  #routine-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #cccccc;
+    text-align: center;
+    grid-column: 1/-1;
+    margin-bottom: 28px;
+    text-shadow:
+      3px 3px 0px #444444,
+      6px 6px 0px rgba(0, 0, 0, 0.5);
+    line-height: 1.1;
+  }
+
+  .track-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .track-card-text {
+    flex: 1;
+  }
+  .track-card-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-left: 16px;
+    opacity: 0.9;
+  }
+
+  .track-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+
+  .track-card:hover {
+    border-color: var(--accent2);
+    background: #161616;
+  }
+  .track-card:hover::before { transform: scaleY(1); }
+
+  .track-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .track-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .track-card-song {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── COUNTDOWN OVERLAY ── */
+  #countdown-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  #countdown-overlay.hidden { display: none; }
+
+  /* ── BREAK HOLDING SCREEN ── */
+  #break-screen {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+    flex-direction: column;
+  }
+  #break-screen.hidden { display: none; }
+  #break-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  #break-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+  }
+  #break-next-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+  #break-next-track {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  #break-timer {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: var(--accent);
+    line-height: 1;
+    margin-top: 8px;
+  }
+  #break-bar-wrap {
+    width: 300px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  #break-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 100%;
+    transition: width 1s linear;
+  }
+  #btn-autoplay.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  #countdown-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    color: var(--accent);
+    line-height: 1;
+    animation: pulse-num 1s ease-in-out infinite;
+  }
+
+  #countdown-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  @keyframes pulse-num {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* ── NEXT MOVE COUNTDOWN ── */
+  #next-move-countdown {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1400;
+    border: 3px solid #f0a500;
+    border-radius: 8px;
+    padding: 18px 42px;
+    text-align: center;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #next-move-countdown.visible { opacity: 1; }
+
+  #nmc-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f0a500;
+    margin-bottom: 3px;
+  }
+  #nmc-move {
+    font-family: 'Barlow', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  #nmc-secs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #f0a500;
+    margin-top: 3px;
+  }
+
+  /* Long-press jump indicator */
+  .row.jump-ready {
+    background: #0a1a0a !important;
+    border-left-color: #4caf50 !important;
+    transition: background 0.4s ease;
+  }
+  body.calibrating #tap-zone { pointer-events: none; }
+
+  #calib-bar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: #1a1000;
+    border-bottom: 2px solid #c87000;
+    flex-shrink: 0;
+    z-index: 15;
+    position: relative;
+  }
+  #calib-bar.visible { display: flex; }
+
+  #calib-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c87000;
+    flex: 1;
+  }
+  #calib-label strong { color: #ffaa00; }
+
+  #calib-next-btn {
+    background: #c87000;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 52px;
+    min-width: 160px;
+    transition: background 0.1s;
+  }
+  #calib-next-btn:active { background: #ffaa00; transform: scale(0.97); }
+
+  #calib-save-btn {
+    background: #2ecc71;
+    color: #000;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 52px;
+    display: none;
+  }
+  #calib-save-btn.visible { display: block; }
+
+  /* Calibrated rows get a small timestamp badge */
+  .row .calib-stamp {
+    display: none;
+    position: absolute;
+    top: 4px; right: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: #c87000;
+    letter-spacing: 1px;
+  }
+  body.calibrating .row .calib-stamp { display: block; }
+
+  /* Calibration result modal */
+  #calib-result {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 24px;
+    overflow-y: auto;
+    display: none;
+  }
+  #calib-result.visible { display: flex; }
+  #calib-result h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 3px;
+    color: #ffaa00;
+    margin-bottom: 8px;
+  }
+  #calib-result p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+  }
+  #calib-result pre {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px;
+    font-size: 12px;
+    color: #aaffaa;
+    width: 100%;
+    max-width: 700px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  #calib-result .calib-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  /* ── LANDSCAPE / LARGE SCREEN TWEAKS ── */
+  @media (orientation: landscape) and (min-width: 900px) {
+    .row { grid-template-columns: 240px 1fr 100px; }
+    .row-header { grid-template-columns: 240px 1fr 100px; }
+    .cell-timing { font-size: 34px; }
+    .row.active .cell-timing { font-size: 42px; }
+    .cell-move { font-size: 28px; }
+    .row.active .cell-move { font-size: 40px; }
+    .cell-reps { font-size: 46px; }
+    .row.active .cell-reps { font-size: 70px; }
+    .cell-banner { font-size: 22px; }
+    .row.active .cell-banner { font-size: 28px; }
+  }
+
+  /* ── PORTRAIT / SMALL SCREEN ── */
+  @media (max-width: 600px) {
+    .row { grid-template-columns: 140px 1fr 70px; }
+    .row-header { grid-template-columns: 140px 1fr 70px; }
+    #track-name { font-size: 22px; }
+    #song-info { font-size: 11px; }
+    #progress-dots { display: none; }
+    #clock { font-size: 24px; }
+  }
 
 </style>
 </head>
 <body>
+<!-- Routine data files: add a new script tag below for each routine -->
+<script src="routines/nu-metal.js"></script>
+<script src="routines/bodypump-10.js"></script>
+
+<!-- Routine Menu -->
+<div id="routine-menu">
+  <div id="routine-menu-inner">
+    <h2>BodyPump</h2>
+    <div id="routine-subtitle">Choose a routine</div>
+    <div id="routine-grid"></div>
+  </div>
+</div>
 
 <!-- Track Select Modal -->
-
-<div id="track-select">
+<div id="track-select" class="hidden">
   <div id="track-grid">
-    <h2>Nu Metal BodyPump</h2>
+    <h2>BodyPump</h2>
   </div>
 </div>
 
 <!-- Countdown Overlay -->
-
 <div id="countdown-overlay" class="hidden">
-  <div id="countdown-num">3</div>
+  <div id="countdown-num">10</div>
   <div id="countdown-label">Starting track…</div>
 </div>
 
-<!-- Header -->
+<!-- Break Holding Screen -->
+<div id="break-screen" class="hidden">
+  <div id="break-content">
+    <div id="break-label">CHANGE WEIGHT · DRINK WATER</div>
+    <div id="break-next-label">GET READY FOR</div>
+    <div id="break-next-track"></div>
+    <div id="break-timer"></div>
+    <div id="break-bar-wrap"><div id="break-bar"></div></div>
+  </div>
+</div>
 
+<!-- Header -->
 <div id="header">
   <div id="track-info">
     <div id="track-name">—</div>
     <div id="song-info">—</div>
   </div>
-  <div id="controls">
-    <div id="wake-indicator" title="Screen wake lock"></div>
-    <button class="btn btn-secondary" onclick="showTrackSelect()">⟵</button>
-    <button class="btn btn-secondary" id="btn-restart" onclick="restartTrack()">↺</button>
-    <button class="btn btn-secondary" id="btn-edit" onclick="startEditMode()">✏️</button>
-    <button class="btn btn-secondary" id="btn-calib" onclick="startCalibration()">🎯</button>
+  <div id="controls-centre">
     <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">PLAY</button>
+  </div>
+  <div id="controls">
+    <button class="btn btn-secondary" onclick="showTrackSelect()">⌂</button>
+    <button class="btn btn-secondary" id="btn-prev-track" onclick="prevTrack()">⟵</button>
+    <button class="btn btn-secondary" id="btn-restart" onclick="restartTrack()">↺</button>
+    <button class="btn btn-secondary" id="btn-calib" onclick="startCalibration()">🎯</button>
+    <button class="btn btn-secondary" id="btn-next-track" onclick="nextTrack()">⟶</button>
+    <button class="btn btn-secondary" id="btn-autoplay" onclick="toggleAutoplay()" title="Autoplay">▶▶</button>
   </div>
 </div>
 
 <!-- Sub-bar: dots + clock -->
-
 <div id="sub-bar">
   <div id="progress-dots"></div>
+  <div id="sub-bar-meta" id="track-meta-strip"></div>
   <div id="clock">0:00</div>
 </div>
 
 <!-- Song progress bar -->
-
 <div id="song-progress-bar"><div id="song-progress-fill"></div></div>
 
-<!-- Edit intro offset bar -->
-
-<div id="edit-intro-bar">
-  <span>Intro offset (secs before first move):</span>
-  <input type="number" id="edit-intro-input" min="0" max="300" value="0" oninput="applyEditChanges()">
-  <strong id="edit-intro-label"></strong>
-  <button class="btn btn-secondary" style="margin-left:auto" onclick="saveEditChanges()">Save</button>
-  <button class="btn btn-secondary" onclick="stopEditMode()">Cancel</button>
-</div>
-
 <!-- Calibration bar (shown in calibration mode) -->
-
 <div id="calib-bar">
   <div id="calib-label">🎯 Calibration — <strong id="calib-move-name">—</strong></div>
   <button id="calib-save-btn" onclick="finishCalibration()">Save timestamps</button>
@@ -831,7 +989,6 @@ margin-top: 8px;
 </div>
 
 <!-- Calibration result modal -->
-
 <div id="calib-result">
   <h2>Calibration Complete</h2>
   <p>Copy these durations into the TRACKS data for <strong id="calib-result-track"></strong>.<br>Replace the existing <code>duration</code> values for each move.</p>
@@ -843,12 +1000,9 @@ margin-top: 8px;
 </div>
 
 <!-- Scroll area -->
-
 <div id="scroll-container" style="position:relative;">
   <div id="tap-zone" onclick="handleTapZone()"></div>
   <div id="scroll-track">
-    <!-- Track meta strip -->
-    <div class="track-meta" id="track-meta-strip"></div>
     <!-- Header row -->
     <div class="row-header">
       <div class="cell-header">Timing</div>
@@ -861,11 +1015,10 @@ margin-top: 8px;
 </div>
 
 <!-- Next move countdown -->
-
 <div id="next-move-countdown">
-  <div id="nmc-label">Next move in</div>
+  <div id="nmc-label">Next Move</div>
   <div id="nmc-move">—</div>
-  <div id="nmc-secs">3 seconds</div>
+  <div id="nmc-secs">in 5 seconds</div>
 </div>
 
 <script>
@@ -875,253 +1028,14 @@ margin-top: 8px;
 // duration = how long this move takes in the actual song
 // ─────────────────────────────────────────────
 
-const TRACKS = [
-  {
-    id: 'warmup',
-    name: 'Warm Up',
-    song: "It's On!",
-    artist: 'Korn',
-    weight: 'Warm up',
-    startAt: 'Guitars',
-    introOffset: 23,
-    totalDuration: 266,
-    moves: [
-      { type:'data', timing:'4/4',     move:'Slow Curl',                  reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'1/1/1/1', move:'RDL and Single Row',         reps:'8',  highlight:true,  duration:21 },
-      { type:'data', timing:'4/4',     move:'Slow Curl',                  reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'4/4',     move:'Slow RDL',                   reps:'2',  highlight:false, duration:10 },
-      { type:'data', timing:'1/1/1/1', move:'RDL and Single Row',         reps:'8',  highlight:true,  duration:21 },
-      { type:'data', timing:'4/4',     move:'Slow Curl', cue:'(stagger down on 3rd)', reps:'4', highlight:false, duration:21 },
-      { type:'banner', move:'Change grip', duration:3 },
-      { type:'data', timing:'4/4',     move:'Slow RDL',                   reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'4/4',     move:'Upright Row',                reps:'2',  highlight:false, duration:10 },
-      { type:'data', timing:'2/2',     move:'Slow Clean and Press',       reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'4/4',     move:'Slow RDL', cue:'(stagger down on 3rd)', reps:'4', highlight:false, duration:20 },
-      { type:'banner', move:'Bar on shoulders', duration:11 },
-      { type:'data', timing:'8/8',     move:'Super Slow Squat',           reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'1/3',     move:'Fast down Slow up Squat',    reps:'8',  highlight:false, duration:21 },
-    ]
-  },
-  {
-    id: 'squats',
-    name: 'Squats',
-    song: 'Roots Bloody Roots',
-    artist: 'Sepultura',
-    weight: '7.5kg',
-    startAt: 'Vocal',
-    totalDuration: 300,
-    moves: [
-      { type:'data', timing:'1/1/2',   move:'Low bounce with float',  reps:'8',  highlight:true,  duration:32 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
-      { type:'data', timing:'1/1/2',   move:'Low bounce with float',  reps:'8',  highlight:true,  duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
-      { type:'banner', move:'Break to drums', duration:8 },
-      { type:'data', timing:'4/4',     move:'Slow squat',             reps:'2',  highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'2',  highlight:false, duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:16 },
-      { type:'data', timing:'1/1/1/1', move:'Bottom bounce',          reps:'16', highlight:true,  duration:32 },
-      { type:'banner', move:'Pause', duration:4 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'4',  highlight:false, duration:32 },
-      { type:'banner', move:'Pause / Stagger Drop on drum', duration:4 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'2',  highlight:false, duration:32 },
-    ]
-  },
-  {
-    id: 'chest',
-    name: 'Chest',
-    song: 'Head Up',
-    artist: 'Deftones',
-    weight: '5kg',
-    startAt: 'Vocal',
-    totalDuration: 280,
-    moves: [
-      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
-      { type:'banner', move:'Pause', duration:4 },
-      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'2/1/1/1/3', move:'Stagger down float up',          reps:'4', highlight:true,  duration:32 },
-      { type:'banner', move:'Pause', duration:4 },
-      { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'2/1/1/1/3', move:'Stagger down float up',          reps:'4', highlight:true,  duration:32 },
-      { type:'banner', move:'Pause', duration:4 },
-      { type:'data', timing:'2/2/2/2',   move:'Single press and skull crusher', reps:'8', highlight:false, duration:64 },
-      { type:'data', timing:'1/1/1/1',   move:'Pulses middle',                  reps:'8', highlight:true,  duration:32 },
-    ]
-  },
-  {
-    id: 'back',
-    name: 'Back',
-    song: 'Walk',
-    artist: 'Pantera',
-    weight: '7.5kg',
-    startAt: 'Drums',
-    totalDuration: 320,
-    moves: [
-      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'1',  highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Down and triple row',   reps:'2',  highlight:false, duration:32 },
-      { type:'banner', move:'Hold to verse', duration:8 },
-      { type:'data', timing:'4/4',     move:'Medium RDL',            reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'1/3',     move:'Fast down slow up RDL', reps:'',   highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger RDL',           reps:'',   highlight:false, duration:16 },
-      { type:'banner', move:'Repeat x 3', duration:4 },
-      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
-      { type:'banner', move:'Rest to verse', duration:8 },
-      { type:'data', timing:'4/4',     move:'Medium RDL',            reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'1/3',     move:'Fast down slow up RDL', reps:'',   highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger RDL',           reps:'',   highlight:false, duration:16 },
-      { type:'banner', move:'Repeat x 3', duration:4 },
-      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
-      { type:'banner', move:'Rest for chaos', duration:8 },
-      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'1',  highlight:false, duration:16 },
-      { type:'data', timing:'2/2',     move:'RDL row, then C&P',    reps:'x4', cue:'(respect/walk)', highlight:false, duration:32 },
-      { type:'data', timing:'8/8',     move:'Super slow RDL',        reps:'2',  highlight:false, duration:32 },
-    ]
-  },
-  {
-    id: 'biceps',
-    name: 'Biceps',
-    song: 'From This Day',
-    artist: 'Machine Head',
-    weight: '5kg',
-    startAt: 'Gedup',
-    totalDuration: 290,
-    moves: [
-      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
-      { type:'banner', move:'Break to verse', duration:8 },
-      { type:'data', timing:'4/4/4/4', move:'Stagger curl',    reps:'2', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger curl',    reps:'2', highlight:false, duration:16 },
-      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
-      { type:'banner', move:'Pause', duration:4 },
-      { type:'data', timing:'4/4/4/4', move:'Stagger curl',    reps:'2', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger curl',    reps:'2', highlight:false, duration:16 },
-      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
-      { type:'banner', move:'Rest (two growls)', duration:8 },
-      { type:'data', timing:'1/1/1/1', move:'Pulses', cue:'(I can feel…)', reps:'8', highlight:true, duration:32 },
-      { type:'banner', move:'Hold to chorus', duration:8 },
-      { type:'data', timing:'8/8',     move:'Super slow curl', reps:'2', highlight:false, duration:32 },
-      { type:'banner', move:'Hold to chorus', duration:8 },
-      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:32 },
-    ]
-  },
-  {
-    id: 'triceps',
-    name: 'Triceps',
-    song: 'Linchpin',
-    artist: 'Fear Factory',
-    weight: '5kg',
-    startAt: 'Apart',
-    totalDuration: 270,
-    moves: [
-      { type:'data', timing:'8/8',     move:'Slow tricep dip',  reps:'2', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger dip',      reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'1/1/1/1', move:'Bottom pulses',    reps:'8', highlight:true,  duration:32 },
-      { type:'data', timing:'4/4',     move:'Medium dip',       reps:'2', highlight:false, duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
-      { type:'banner', move:"Pause (no you can't)", duration:4 },
-      { type:'banner', move:'Rest to verse', duration:8 },
-      { type:'data', timing:'2/2/2/2', move:'Stagger dip',      reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'1/1/1/1', move:'Bottom pulses',    reps:'8', highlight:true,  duration:32 },
-      { type:'data', timing:'4/4',     move:'Medium dip',       reps:'2', highlight:false, duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
-      { type:'banner', move:"Rest (no you can't take)", duration:8 },
-      { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:32 },
-      { type:'data', timing:'2/2',     move:'Single dips',      reps:'8', highlight:false, duration:32 },
-    ]
-  },
-  {
-    id: 'lunges',
-    name: 'Lunges',
-    song: 'Killing In The Name',
-    artist: 'RATM',
-    weight: '7.5kg',
-    startAt: 'Killing…',
-    totalDuration: 330,
-    moves: [
-      { type:'data', timing:'2/2',     move:'Medium lunge',       reps:'4', highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Slow stagger lunge', reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Pulse at bottom',    reps:'8', highlight:true,  duration:32 },
-      { type:'data', timing:'4/4/4/4', move:'Slow stagger hold',  reps:'3', highlight:false, duration:48 },
-      { type:'data', timing:'4/4',     move:'Slow lunge', cue:'(switch sides last 2)', reps:'2', highlight:false, duration:16 },
-      { type:'data', timing:'2/2/2/2', move:'Slow stagger lunge', reps:'4', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Pulse at bottom',    reps:'8', highlight:true,  duration:32 },
-      { type:'data', timing:'4/4/4/4', move:'Slow stagger hold',  reps:'3', highlight:false, duration:48 },
-      { type:'data', timing:'4/4',     move:'Slow lunge',         reps:'4', highlight:false, duration:32 },
-      { type:'banner', move:'Reset and rest for solo', duration:8 },
-      { type:'data', timing:'4/4',     move:'Ankle raises', cue:'(f u)', reps:'8', highlight:false, duration:32 },
-      { type:'data', timing:'2/2/2/2', move:'Fwd alt step lunge', reps:'6', highlight:false, duration:48 },
-    ]
-  },
-  {
-    id: 'shoulders',
-    name: 'Shoulders',
-    song: 'Break Stuff',
-    artist: 'Limp Bizkit',
-    weight: '2.5kg',
-    startAt: 'Days',
-    totalDuration: 200,
-    moves: [
-      { type:'data', timing:'4/4', move:'Lateral raise',           reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
-      { type:'data', timing:'4/4', move:'Lateral raise',           reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
-      { type:'banner', move:"Rest for talking to 'chainsaw'", duration:16 },
-      { type:'data', timing:'4/4', move:'Down and fly',            reps:'3',  highlight:false, duration:24 },
-      { type:'data', timing:'1/3', move:'Fast up slow down lat',   reps:'12', highlight:false, duration:48 },
-      { type:'data', timing:'2/2', move:'Single up and meet down', reps:'4',  highlight:false, duration:16 },
-    ]
-  },
-  {
-    id: 'abs',
-    name: 'Abs',
-    song: 'More Human Than Human',
-    artist: 'White Zombie',
-    weight: 'None',
-    startAt: 'Guitars',
-    totalDuration: 290,
-    moves: [
-      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
-      { type:'banner', move:'Hold to verse', duration:8 },
-      { type:'data', timing:'4/4', move:'Dead bugs',         reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'1/1', move:'Crunch pulse', cue:'(yeah)', reps:'8', highlight:true, duration:16 },
-      { type:'data', timing:'2/2', move:'Bicycles',          reps:'12', highlight:false, duration:24 },
-      { type:'banner', move:'Hold', duration:8 },
-      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'4/4', move:'Dead bugs',         reps:'4',  highlight:false, duration:32 },
-      { type:'data', timing:'1/1', move:'Crunch pulse', cue:'(yeah)', reps:'8', highlight:true, duration:16 },
-      { type:'data', timing:'2/2', move:'Bicycles',          reps:'12', highlight:false, duration:24 },
-      { type:'banner', move:'Hold', duration:8 },
-      { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:32 },
-      { type:'banner', move:'Flip over for plank', duration:4 },
-      { type:'data', timing:'—',   move:'Plank', cue:'(to vocals end)', reps:'', highlight:false, duration:32 },
-      { type:'data', timing:'1/1', move:'Mountain climbers', cue:'(to end)', reps:'16', highlight:true, duration:32 },
-    ]
-  },
-  {
-    id: 'cooldown',
-    name: 'Cooldown',
-    song: 'In The End',
-    artist: 'Linkin Park',
-    weight: 'None',
-    startAt: 'Vocal',
-    totalDuration: 220,
-    isCooldown: true,
-    moves: [
-      { type:'data',   move:'Slow stretch and thread needle', duration:24 },
-      { type:'banner', move:'Repeat other side', duration:4 },
-      { type:'banner', move:'Chorus — cat cows', duration:16 },
-      { type:'data',   move:'Runners lunge and tricep stretch', cue:"(swap arm 'tried so hard')", duration:24 },
-      { type:'data',   move:'Lean back', cue:"('got so far')", duration:8 },
-      { type:'banner', move:'Swap legs for chorus', duration:4 },
-      { type:'data',   move:'Runners lunge and chest stretch', duration:16 },
-      { type:'data',   move:'Lean back', cue:"('I had to fall')", duration:8 },
-      { type:'banner', move:'Pigeon first side until chorus', duration:32 },
-      { type:'banner', move:'Swap legs — chorus', duration:16 },
-      { type:'data',   move:'Forward fold and stretch', duration:24 },
-    ]
-  }
-];
+// ── ROUTINE DATA (loaded dynamically) ──
+let ROUTINE_NAME = '';
+let TRACKS = [];
+let TRACK_ICONS = {};
+let TRACK_ICON_MAP = {};
+let BREAK_AFTER = {};
+
+
 
 function updateNextMoveCountdown() {
   const track = TRACKS[currentTrackIdx];
@@ -1144,7 +1058,7 @@ function updateNextMoveCountdown() {
 
     document.getElementById('nmc-move').textContent = label;
     document.getElementById('nmc-secs').textContent =
-      secsUntil === 1 ? '1 second' : `${secsUntil} seconds`;
+      secsUntil === 1 ? 'in 1 second' : `in ${secsUntil} seconds`;
     el.classList.add('visible');
   } else {
     hideNextMoveCountdown();
@@ -1165,14 +1079,16 @@ function saveCalibrations() {
   try {
     const data = {};
     TRACKS.forEach(t => {
-      data[t.id] = {
-        totalDuration: t.totalDuration,
-        introOffset: t.introOffset || 0,
-        durations: t.moves.map(m => m.duration)
-      };
+      if (t.introOffset !== undefined) {
+        data[t.id] = {
+          totalDuration: t.totalDuration,
+          introOffset: t.introOffset,
+          durations: t.moves.map(m => m.duration)
+        };
+      }
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch(e) { /* storage unavailable — silent fail */ }
+  } catch(e) {}
 }
 
 function loadCalibrations() {
@@ -1205,13 +1121,21 @@ let moveTimestamps = []; // cumulative start time for each move
 // ─────────────────────────────────────────────
 function buildTrackSelect() {
   const grid = document.getElementById('track-grid');
+  grid.innerHTML = '<div id="track-select-header"><button class="btn btn-secondary" onclick="showRoutineMenu()" style="font-size:12px;letter-spacing:2px;">← ROUTINES</button></div><div id="routine-name">' + ROUTINE_NAME + '</div>';
+
   TRACKS.forEach((t, i) => {
+    const isCalibrated = t.introOffset !== undefined;
     const card = document.createElement('div');
     card.className = 'track-card';
+    const iconKey = TRACK_ICON_MAP[t.name];
+    const iconSrc = iconKey ? TRACK_ICONS[iconKey] : '';
     card.innerHTML = `
-      <div class="track-card-num">${String(i+1).zfill ? String(i+1).padStart(2,'0') : (i+1).toString().padStart(2,'0')} / ${TRACKS.length}</div>
-      <div class="track-card-name">${t.name}</div>
-      <div class="track-card-song">${t.song} — ${t.artist}</div>
+      <div class="track-card-text">
+        <div class="track-card-num">${(i+1).toString().padStart(2,'0')} / ${TRACKS.length}</div>
+        <div class="track-card-name">${t.name}</div>
+        <div class="track-card-song">${t.song} — ${t.artist}</div>
+      </div>
+      ${iconSrc ? `<img class="track-card-icon" src="${iconSrc}" alt="${t.name}">` : ''}
     `;
     card.onclick = () => loadTrack(i);
     grid.appendChild(card);
@@ -1219,6 +1143,7 @@ function buildTrackSelect() {
 }
 
 function showTrackSelect() {
+  dismissBreakScreen();
   stopTrack();
   document.getElementById('track-select').classList.remove('hidden');
 }
@@ -1227,6 +1152,7 @@ function showTrackSelect() {
 // LOAD TRACK
 // ─────────────────────────────────────────────
 function loadTrack(idx) {
+  dismissBreakScreen();
   document.getElementById('track-select').classList.add('hidden');
   currentTrackIdx = idx;
   currentMoveIdx  = -1;
@@ -1248,20 +1174,29 @@ function loadTrack(idx) {
   document.getElementById('track-name').textContent = track.name.toUpperCase();
   document.getElementById('song-info').textContent = `${track.song} — ${track.artist}`;
   document.getElementById('btn-play').textContent = 'PLAY';
+  document.getElementById('btn-play').disabled = false;
+  document.getElementById('btn-calib').disabled = false;
+  document.getElementById('btn-calib').textContent = '🎯';
+  document.getElementById('btn-calib').onclick = startCalibration;
+  document.getElementById('btn-next-track').style.display = 
+    idx >= TRACKS.length - 1 ? 'none' : '';
+  document.getElementById('btn-prev-track').style.display =
+    idx <= 0 ? 'none' : '';
+  calibMode = false;
+  document.body.classList.remove('calibrating', 'editing');
+  document.getElementById('calib-bar').classList.remove('visible');
 
   // Meta strip
-  const meta = document.getElementById('track-meta-strip');
+  const meta = document.getElementById('sub-bar-meta');
   meta.innerHTML = `
     <div class="meta-item">Weight <span>${track.weight}</span></div>
     <div class="meta-item">Start at <span>${track.startAt}</span></div>
-    <div class="meta-item">Moves <span>${track.moves.length}</span></div>
   `;
 
   // Show/hide header columns for cooldown
   const headerRow = document.querySelector('.row-header');
   if (track.isCooldown) {
     headerRow.style.display = 'none';
-    document.querySelector('.track-meta').style.gridTemplateColumns = '1fr';
   } else {
     headerRow.style.display = 'grid';
   }
@@ -1271,7 +1206,7 @@ function loadTrack(idx) {
   container.innerHTML = '';
   track.moves.forEach((m, i) => {
     const row = document.createElement('div');
-    row.className = 'row' + (m.type === 'banner' ? ' banner' : '') + (m.highlight ? ' highlight' : '');
+    row.className = 'row' + (m.type === 'banner' ? ' banner' : '');
     row.id = `row-${i}`;
 
     if (m.type === 'banner') {
@@ -1336,11 +1271,11 @@ function togglePlay() {
   }
 }
 
-function startCountdown() {
+function startCountdown(onComplete) {
   const overlay = document.getElementById('countdown-overlay');
   const numEl   = document.getElementById('countdown-num');
   overlay.classList.remove('hidden');
-  let count = 3;
+  let count = 10;
   numEl.textContent = count;
 
   const cd = setInterval(() => {
@@ -1348,7 +1283,8 @@ function startCountdown() {
     if (count <= 0) {
       clearInterval(cd);
       overlay.classList.add('hidden');
-      playTrack();
+      if (onComplete) onComplete();
+      else playTrack();
     } else {
       numEl.textContent = count;
     }
@@ -1373,6 +1309,18 @@ function stopTrack() {
   pauseTrack();
   currentMoveIdx = -1;
   elapsed = 0;
+}
+
+function nextTrack() {
+  if (currentTrackIdx < TRACKS.length - 1) {
+    loadTrack(currentTrackIdx + 1);
+  }
+}
+
+function prevTrack() {
+  if (currentTrackIdx > 0) {
+    loadTrack(currentTrackIdx - 1);
+  }
 }
 
 function restartTrack() {
@@ -1415,27 +1363,85 @@ function tick() {
   // Auto-advance to next track
   if (elapsed >= track.totalDuration) {
     pauseTrack();
-    if (currentTrackIdx < TRACKS.length - 1) {
-      setTimeout(() => loadTrack(currentTrackIdx + 1), 1500);
+    if (autoplayEnabled && currentTrackIdx < TRACKS.length - 1) {
+      startBreakScreen(currentTrackIdx + 1);
     }
   }
+}
+
+// ─────────────────────────────────────────────
+// AUTOPLAY & BREAK SCREEN
+// ─────────────────────────────────────────────
+let autoplayEnabled = false;
+let breakTimer = null;
+let breakSecondsLeft = 0;
+let breakTotalSeconds = 0;
+
+// Break durations: null means no break (flow straight in)
+
+function toggleAutoplay() {
+  autoplayEnabled = !autoplayEnabled;
+  document.getElementById('btn-autoplay').classList.toggle('active', autoplayEnabled);
+}
+
+function startBreakScreen(nextIdx) {
+  const nextTrackData = TRACKS[nextIdx];
+  const currentId = TRACKS[currentTrackIdx].id;
+  const breakDuration = BREAK_AFTER[currentId];
+
+  if (!breakDuration) {
+    // No break — load next track immediately and autoplay
+    loadTrack(nextIdx);
+    startCountdown(() => { togglePlay(); });
+    return;
+  }
+
+  breakTotalSeconds = breakDuration;
+  breakSecondsLeft = breakDuration;
+
+  document.getElementById('break-next-track').textContent = nextTrackData.name.toUpperCase();
+  document.getElementById('break-timer').textContent = breakSecondsLeft;
+  document.getElementById('break-bar').style.width = '100%';
+  document.getElementById('break-screen').classList.remove('hidden');
+
+  clearInterval(breakTimer);
+  breakTimer = setInterval(() => {
+    breakSecondsLeft--;
+    document.getElementById('break-timer').textContent = breakSecondsLeft;
+    const pct = (breakSecondsLeft / breakTotalSeconds) * 100;
+    document.getElementById('break-bar').style.width = pct + '%';
+
+    // With 10 seconds left, load track and start countdown overlay
+    if (breakSecondsLeft === 10) {
+      loadTrack(nextIdx);
+      document.getElementById('break-screen').classList.add('hidden');
+      clearInterval(breakTimer);
+      startCountdown(() => { togglePlay(); });
+    }
+  }, 1000);
+}
+
+function dismissBreakScreen() {
+  clearInterval(breakTimer);
+  document.getElementById('break-screen').classList.add('hidden');
 }
 
 // ─────────────────────────────────────────────
 // SCROLL TO MOVE
 // ─────────────────────────────────────────────
 function scrollToMove(idx) {
-  // Remove active/next from all
   document.querySelectorAll('.row').forEach(r => {
     r.classList.remove('active', 'next');
   });
+
+  const container = document.getElementById('scroll-container');
 
   if (idx >= 0) {
     const activeRow = document.getElementById(`row-${idx}`);
     if (activeRow) {
       activeRow.classList.add('active');
 
-      // Mark next (skip banners for "next" styling)
+      // Mark next data row
       for (let j = idx + 1; j < TRACKS[currentTrackIdx].moves.length; j++) {
         const nextRow = document.getElementById(`row-${j}`);
         if (nextRow && !nextRow.classList.contains('banner')) {
@@ -1444,17 +1450,14 @@ function scrollToMove(idx) {
         }
       }
 
-      // Scroll so active row is ~25% from top of container
-      const container = document.getElementById('scroll-container');
-      const scrollTrack = document.getElementById('scroll-track');
+      // Scroll active row to ~25% from top
       const containerH = container.clientHeight;
       const rowTop = activeRow.offsetTop;
       const targetScroll = rowTop - containerH * 0.25;
-
-      scrollTrack.style.transform = `translateY(${-Math.max(0, targetScroll)}px)`;
+      container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
     }
   } else {
-    document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+    container.scrollTo({ top: 0, behavior: 'instant' });
   }
 }
 
@@ -1512,101 +1515,6 @@ function updateNextUp() {
 // Reveals a seconds input on every row so you
 // can tweak durations without recalibrating
 // ─────────────────────────────────────────────
-let editMode = false;
-
-function startEditMode() {
-  if (playing) pauseTrack();
-  editMode = true;
-  document.body.classList.add('editing');
-  document.getElementById('btn-edit').textContent = '✕ Exit edit';
-  document.getElementById('btn-edit').onclick = stopEditMode;
-  document.getElementById('btn-play').disabled = true;
-  document.getElementById('btn-calib').disabled = true;
-
-  const track = TRACKS[currentTrackIdx];
-
-  // Set intro offset input
-  const introInput = document.getElementById('edit-intro-input');
-  introInput.value = track.introOffset || 0;
-  document.getElementById('edit-intro-label').textContent =
-    `(currently ${track.introOffset || 0}s)`;
-
-  // Add duration input to every row
-  track.moves.forEach((m, i) => {
-    const row = document.getElementById(`row-${i}`);
-    if (!row) return;
-    let editDiv = row.querySelector('.edit-dur');
-    if (!editDiv) {
-      editDiv = document.createElement('div');
-      editDiv.className = 'edit-dur';
-      editDiv.innerHTML = `
-        <label>secs</label>
-        <input type="number" min="1" max="999" data-idx="${i}" value="${m.duration}"
-          oninput="previewEditRow(${i}, this.value)">
-      `;
-      row.appendChild(editDiv);
-    } else {
-      editDiv.querySelector('input').value = m.duration;
-    }
-  });
-}
-
-function previewEditRow(idx, val) {
-  // Just visual feedback — not applied until Save
-  const row = document.getElementById(`row-${idx}`);
-  if (row) row.style.outline = val > 0 ? '1px solid #ffaa00' : '';
-}
-
-function applyEditChanges() {
-  // Update the intro label live as user types
-  const val = parseInt(document.getElementById('edit-intro-input').value) || 0;
-  document.getElementById('edit-intro-label').textContent = `(currently ${val}s)`;
-}
-
-function saveEditChanges() {
-  const track = TRACKS[currentTrackIdx];
-
-  // Read intro offset
-  const newIntro = parseInt(document.getElementById('edit-intro-input').value) || 0;
-  track.introOffset = newIntro;
-
-  // Read all row durations
-  track.moves.forEach((m, i) => {
-    const row = document.getElementById(`row-${i}`);
-    if (!row) return;
-    const input = row.querySelector('.edit-dur input');
-    if (input) {
-      const val = parseInt(input.value);
-      if (val > 0) m.duration = val;
-    }
-  });
-
-  // Recompute totalDuration
-  track.totalDuration = track.introOffset +
-    track.moves.reduce((sum, m) => sum + m.duration, 0);
-
-  saveCalibrations();
-  stopEditMode();
-}
-
-function stopEditMode() {
-  editMode = false;
-  document.body.classList.remove('editing');
-  document.getElementById('btn-edit').textContent = '✏️ Edit';
-  document.getElementById('btn-edit').onclick = startEditMode;
-  document.getElementById('btn-play').disabled = false;
-  document.getElementById('btn-calib').disabled = false;
-
-  // Remove outlines
-  document.querySelectorAll('.row').forEach(r => r.style.outline = '');
-
-  // Rebuild move timestamps with updated values
-  const track = TRACKS[currentTrackIdx];
-  moveTimestamps = [];
-  let t = track.introOffset || 0;
-  track.moves.forEach(m => { moveTimestamps.push(t); t += m.duration; });
-}
-
 // ─────────────────────────────────────────────
 // CALIBRATION MODE
 // ─────────────────────────────────────────────
@@ -1616,16 +1524,8 @@ let calibMoveIdx = 0;
 let calibCountdownTimer = null;
 
 function startCalibration() {
-  // Confirm first if any track has been calibrated
-  const hasCalib = localStorage.getItem(STORAGE_KEY);
-  if (hasCalib) {
-    const ok = confirm(
-      'This will overwrite the saved timestamps for ' +
-      TRACKS[currentTrackIdx].name +
-      '. Are you sure?'
-    );
-    if (!ok) return;
-  }
+  // Clear any potentially stuck disabled state
+  document.getElementById('btn-calib').disabled = false;
 
   // Stop everything cleanly first
   clearInterval(timer);
@@ -1645,7 +1545,7 @@ function startCalibration() {
   currentMoveIdx = -1;
 
   // Reset the display
-  document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+  document.getElementById('scroll-container').scrollTo({ top: 0, behavior: 'instant' });
   document.querySelectorAll('.row').forEach(r => r.classList.remove('active', 'next'));
   updateClock();
   updateProgressBar();
@@ -1714,7 +1614,7 @@ function stopCalibration() {
   currentMoveIdx = -1;
   playing = false;
   document.getElementById('btn-play').textContent = 'PLAY';
-  document.getElementById('scroll-track').style.transform = 'translateY(0px)';
+  document.getElementById('scroll-container').scrollTo({ top: 0, behavior: 'instant' });
   document.querySelectorAll('.row').forEach(r => r.classList.remove('active', 'next'));
   updateClock();
   updateProgressBar();
@@ -1769,8 +1669,7 @@ function calibTap() {
       const containerH = container.clientHeight;
       const rowTop = nextRow.offsetTop;
       const targetScroll = rowTop - containerH * 0.25;
-      document.getElementById('scroll-track').style.transform =
-        `translateY(${-Math.max(0, targetScroll)}px)`;
+      container.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
     }
     updateCalibLabel();
   } else {
@@ -1834,6 +1733,7 @@ function finishCalibration() {
 
   // Persist to localStorage
   saveCalibrations();
+  buildTrackSelect();
 
   stopCalibration();
 }
@@ -1876,12 +1776,73 @@ document.addEventListener('visibilitychange', () => {
 // ─────────────────────────────────────────────
 // TAP ZONE — tap anywhere on the scroll area to play/pause
 // ─────────────────────────────────────────────
-function handleTapZone() {
-  // Only active once a track is loaded and playing has started
-  if (currentMoveIdx >= 0 || playing) {
-    togglePlay();
+// ─────────────────────────────────────────────
+// TAP TO PLAY/PAUSE on scroll area
+// Distinguishes a tap from a scroll so both work
+// ─────────────────────────────────────────────
+(function() {
+  const container = document.getElementById('scroll-container');
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  container.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  container.addEventListener('touchend', e => {
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    const dt = Date.now() - touchStartTime;
+    if (dy < 10 && dt < 250 && !calibMode) {
+      if (currentMoveIdx >= 0 || playing) togglePlay();
+    }
+  }, { passive: true });
+})();
+
+function handleTapZone() {} // kept for compatibility
+
+// ─────────────────────────────────────────────
+// LONG PRESS TO JUMP TO MOVE
+// Hold any row for 500ms to jump to that point
+// ─────────────────────────────────────────────
+(function() {
+  let pressTimer = null;
+  let pressRow = null;
+
+  function startPress(e) {
+    if (calibMode) return;
+    const row = e.target.closest('.row[id^="row-"]');
+    if (!row) return;
+    pressRow = row;
+    row.classList.add('jump-ready');
+    pressTimer = setTimeout(() => {
+      const idx = parseInt(row.id.replace('row-', ''));
+      if (!isNaN(idx) && moveTimestamps[idx] !== undefined) {
+        elapsed = moveTimestamps[idx];
+        currentMoveIdx = idx - 1; // tick() will advance to idx
+        if (!playing) {
+          playing = true;
+          timer = setInterval(tick, 1000);
+          requestWakeLock();
+          document.getElementById('btn-play').textContent = 'PAUSE';
+        }
+        tick(); // immediate update
+      }
+      row.classList.remove('jump-ready');
+      pressRow = null;
+    }, 500);
   }
-}
+
+  function cancelPress() {
+    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    if (pressRow) { pressRow.classList.remove('jump-ready'); pressRow = null; }
+  }
+
+  const container = document.getElementById('scroll-container');
+  container.addEventListener('touchstart', startPress, { passive: true });
+  container.addEventListener('touchend', cancelPress, { passive: true });
+  container.addEventListener('touchmove', cancelPress, { passive: true });
+})();
 
 // ─────────────────────────────────────────────
 // KEYBOARD SHORTCUTS
@@ -1891,17 +1852,76 @@ document.addEventListener('keydown', e => {
   if (e.code === 'ArrowRight' && currentTrackIdx < TRACKS.length - 1) loadTrack(currentTrackIdx + 1);
   if (e.code === 'ArrowLeft' && currentTrackIdx > 0) loadTrack(currentTrackIdx - 1);
   if (e.code === 'KeyR') restartTrack();
-  if (e.code === 'Escape') showTrackSelect();
+  if (e.code === 'Escape') showRoutineMenu();
 });
+
+// ─────────────────────────────────────────────
+// ROUTINE MENU
+// ─────────────────────────────────────────────
+function showRoutineMenu() {
+  dismissBreakScreen();
+  stopTrack();
+  document.getElementById('track-select').classList.add('hidden');
+  document.getElementById('routine-menu').classList.remove('hidden');
+}
+
+function loadRoutineList() {
+  const grid = document.getElementById('routine-grid');
+  grid.innerHTML = '';
+  const routines = window.ROUTINES || [];
+  if (routines.length === 0) {
+    grid.innerHTML = '<div style="color:var(--text-dim);font-family:\'Bebas Neue\',sans-serif;letter-spacing:2px;grid-column:1/-1;text-align:center;padding:40px;">No routines loaded.<br>Check routines/nu-metal.js is in the same folder.</div>';
+    return;
+  }
+  routines.forEach((r, idx) => {
+    const card = document.createElement('div');
+    card.className = 'routine-card';
+    const fontStyle = r.font ? `style="font-family:'${r.font}',cursive"` : '';
+    card.innerHTML = `
+      <div class="routine-card-name" ${fontStyle}>${r.name}</div>
+      <div class="routine-card-meta">${r.tracks.length} tracks</div>
+    `;
+    card.onclick = () => loadRoutine(idx);
+    grid.appendChild(card);
+  });
+}
+
+function loadRoutine(idx) {
+  const r = window.ROUTINES[idx];
+  ROUTINE_NAME   = r.name;
+  TRACKS         = r.tracks;
+  TRACK_ICONS    = r.icons;
+  TRACK_ICON_MAP = r.iconMap;
+  BREAK_AFTER    = r.breakAfter;
+
+  loadCalibrations();
+  document.getElementById('routine-menu').classList.add('hidden');
+  buildTrackSelect();
+
+  // Apply routine-specific font to routine name (must be after buildTrackSelect)
+  const nameEl = document.getElementById('routine-name');
+  if (nameEl) {
+    nameEl.style.fontFamily = r.font ? `'${r.font}', cursive` : "'Bebas Neue', sans-serif";
+    nameEl.style.fontSize = '36px';
+  }
+
+  loadTrack(0);
+  document.getElementById('track-select').classList.remove('hidden');
+}
+
+// Update home button to go to routine menu, not track select
+document.querySelector('[onclick="showTrackSelect()"]').setAttribute('onclick', 'showRoutineMenu()');
 
 // ─────────────────────────────────────────────
 // START
 // ─────────────────────────────────────────────
-loadCalibrations(); // restore any previously saved timings
-buildTrackSelect();
-loadTrack(0);
-document.getElementById('track-select').classList.remove('hidden');
+loadCalibrations();
+// Defer so all routine <script> tags are guaranteed to have run first
+setTimeout(() => {
+  loadRoutineList();
+  document.getElementById('routine-menu').classList.remove('hidden');
+  document.getElementById('track-select').classList.add('hidden');
+}, 0);
 </script>
-
 </body>
 </html>
