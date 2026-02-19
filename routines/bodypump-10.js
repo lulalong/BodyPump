@@ -263,3 +263,11 @@ window.ROUTINES.push({
   iconMap: TRACK_ICON_MAP_10,
   breakAfter: BREAK_AFTER_10,
 });
+
+window.ROUTINES = window.ROUTINES || [];
+
+window.ROUTINES.push({
+  name: ROUTINE_NAME_10,
+  tracks: TRACKS_10,
+  icons: TRACK_ICONS_10
+});
