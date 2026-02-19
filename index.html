@@ -772,7 +772,7 @@
 
 <!-- Countdown Overlay -->
 <div id="countdown-overlay" class="hidden">
-  <div id="countdown-num">3</div>
+  <div id="countdown-num">10</div>
   <div id="countdown-label">Starting track…</div>
 </div>
 
@@ -1369,7 +1369,7 @@ function startCountdown() {
   const overlay = document.getElementById('countdown-overlay');
   const numEl   = document.getElementById('countdown-num');
   overlay.classList.remove('hidden');
-  let count = 3;
+  let count = 10;
   numEl.textContent = count;
 
   const cd = setInterval(() => {
