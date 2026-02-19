@@ -1915,13 +1915,17 @@ document.querySelector('[onclick="showTrackSelect()"]').setAttribute('onclick', 
 // ─────────────────────────────────────────────
 // START
 // ─────────────────────────────────────────────
-loadCalibrations();
-// Defer so all routine <script> tags are guaranteed to have run first
-setTimeout(() => {
+window.addEventListener("load", () => {
+
+  loadCalibrations();
+
   loadRoutineList();
+
   document.getElementById('routine-menu').classList.remove('hidden');
+
   document.getElementById('track-select').classList.add('hidden');
-}, 0);
+
+});
 </script>
 </body>
 </html>
