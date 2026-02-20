@@ -39,7 +39,7 @@ const TRACKS = [
     weight: 'Warm up',
     startAt: 'Guitars',
     introOffset: 23,
-    totalDuration: 266,
+    totalDuration: 269,
     moves: [
       { type:'data', timing:'4/4',     move:'Slow Curl',                  reps:'4',  highlight:false, duration:21 },
       { type:'data', timing:'1/1/1/1', move:'Fast Down Single Row',         reps:'8',  highlight:true,  duration:21 },
@@ -54,7 +54,7 @@ const TRACKS = [
       { type:'data', timing:'4/4',     move:'Slow RDL', cue:'(stagger down on 3rd)', reps:'4', highlight:false, duration:20 },
       { type:'banner', move:'Bar on shoulders', duration:11 },
       { type:'data', timing:'8/8',     move:'Super Slow Squat',           reps:'4',  highlight:false, duration:21 },
-      { type:'data', timing:'1/3',     move:'Fast down Slow up Squat',    reps:'8',  highlight:false, duration:21 },
+      { type:'data', timing:'1/3',     move:'Fast down Slow up Squat',    reps:'8',  highlight:false, duration:24 },
     ]
   },
   {
@@ -65,7 +65,7 @@ const TRACKS = [
     weight: '7.5kg',
     startAt: 'Vocal',
     introOffset: 21,
-    totalDuration: 208,
+    totalDuration: 212,
     moves: [
       { type:'data', timing:'1/1/2',   move:'Low bounce with float',  reps:'8',  highlight:false, duration:17 },
       { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'1',  highlight:false, duration:8 },
@@ -83,7 +83,7 @@ const TRACKS = [
       { type:'banner', move:'Pause', duration:2 },
       { type:'data', timing:'2/2/2/2', move:'Stagger squat',          reps:'4',  highlight:false, duration:16 },
       { type:'banner', move:'Pause / Stagger Drop on drum', duration:16 },
-      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'2',  highlight:false, duration:16 },
+      { type:'data', timing:'8/8',     move:'Super slow squat',       reps:'2',  highlight:false, duration:20 },
     ]
   },
   {
@@ -94,7 +94,7 @@ const TRACKS = [
     weight: '5kg',
     startAt: 'Vocal',
     introOffset: 30,
-    totalDuration: 201,
+    totalDuration: 282,
     moves: [
       { type:'data', timing:'4/4',       move:'Chest press',                    reps:'4', highlight:false, duration:19 },
       { type:'banner', move:'Pause', duration:9 },
@@ -105,7 +105,7 @@ const TRACKS = [
       { type:'data', timing:'2/1/1/1/3', move:'Stagger down float up',          reps:'4', highlight:false, duration:18 },
       { type:'banner', move:'Pause', duration:9 },
       { type:'data', timing:'2/2/2/2',   move:'Single press and skull crusher', reps:'8', highlight:false, duration:36 },
-      { type:'data', timing:'1/1/1/1',   move:'Pulses middle',                  reps:'8', highlight:false, duration:19 },
+      { type:'data', timing:'1/1/1/1',   move:'Pulses middle',                  reps:'8', highlight:false, duration:100 },
     ]
   },
   {
@@ -116,7 +116,7 @@ const TRACKS = [
     weight: '7.5kg',
     startAt: 'Drums',
     introOffset: 8,
-    totalDuration: 286,
+    totalDuration: 315,
     moves: [
       { type:'data', timing:'8/8',           move:'Super slow RDL',                reps:'1',  highlight:false, duration:9 },
       { type:'data', timing:'2/2/2/2',       move:'Down and triple row',           reps:'2',  highlight:false, duration:16 },
@@ -131,7 +131,7 @@ const TRACKS = [
       { type:'banner', move:'Rest for chaos', duration:36 },
       { type:'data', timing:'8/8',           move:'Super slow RDL',                reps:'1',  highlight:false, duration:10 },
       { type:'data', timing:'2/2',           move:'RDL row, then C&P',             reps:'4',  cue:'(respect/walk)', highlight:false, duration:34 },
-      { type:'data', timing:'8/8',           move:'Super slow RDL',                reps:'4',  highlight:false, duration:30 },
+      { type:'data', timing:'8/8',           move:'Super slow RDL',                reps:'4',  highlight:false, duration:59 },
     ]
   },
   {
@@ -142,7 +142,7 @@ const TRACKS = [
     weight: '5kg',
     startAt: 'Gedup',
     introOffset: 20,
-    totalDuration: 226,
+    totalDuration: 236,
     moves: [
       { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:17 },
       { type:'banner', move:'Break to verse', duration:18 },
@@ -158,7 +158,7 @@ const TRACKS = [
       { type:'banner', move:'Hold to vocal', duration:9 },
       { type:'data', timing:'8/8',     move:'Super slow curl', reps:'2', highlight:false, duration:18 },
       { type:'banner', move:'Hold to chorus', duration:2 },
-      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:33 },
+      { type:'data', timing:'4/4',     move:'Medium curl',     reps:'4', highlight:false, duration:43 },
     ]
   },
   {
@@ -169,7 +169,7 @@ const TRACKS = [
     weight: '5kg',
     startAt: 'Apart',
     introOffset: 8,
-    totalDuration: 193,
+    totalDuration: 204,
     moves: [
       { type:'data', timing:'8/8',     move:'Slow tricep dip',  reps:'2', highlight:false, duration:17 },
       { type:'data', timing:'2/2/2/2', move:'Stagger dip',      reps:'4', highlight:false, duration:17 },
@@ -184,7 +184,7 @@ const TRACKS = [
       { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:17 },
       { type:'banner', move:"Rest (no you can't take)", duration:17 },
       { type:'data', timing:'8/8',     move:'Super slow dip',   reps:'2', highlight:false, duration:17 },
-      { type:'data', timing:'2/2',     move:'Single dips',      reps:'8', highlight:false, duration:20 },
+      { type:'data', timing:'2/2',     move:'Single dips',      reps:'8', highlight:false, duration:29 },
     ]
   },
   {
@@ -195,7 +195,7 @@ const TRACKS = [
     weight: '7.5kg',
     startAt: 'Killing…',
     introOffset: 41,
-    totalDuration: 306,
+    totalDuration: 313,
     moves: [
       { type:'data', timing:'2/2',     move:'Medium lunge',         reps:'4', highlight:false, duration:13 },
       { type:'data', timing:'2/2/2/2', move:'Slow stagger lunge',   reps:'4', highlight:false, duration:22 },
@@ -209,7 +209,7 @@ const TRACKS = [
       { type:'data', timing:'4/4',     move:'Slow lunge',           reps:'4', highlight:false, duration:22 },
       { type:'banner', move:'Reset and rest for solo', duration:22 },
       { type:'data', timing:'4/4',     move:'Ankle raises', cue:'(f u)', reps:'8', highlight:false, duration:22 },
-      { type:'data', timing:'2/2/2/2', move:'Fwd alt step lunge',   reps:'6', highlight:false, duration:32 },
+      { type:'data', timing:'2/2/2/2', move:'Fwd alt step lunge',   reps:'6', highlight:false, duration:39 },
     ]
   },
   {
@@ -220,7 +220,7 @@ const TRACKS = [
     weight: '2.5kg',
     startAt: 'Days',
     introOffset: 4,
-    totalDuration: 174,
+    totalDuration: 166,
     moves: [
       { type:'data', timing:'4/4', move:'Lateral raise',           reps:'4',  highlight:false, duration:17 },
       { type:'data', timing:'2/2', move:'Front Raise LR RL', reps:'4',  highlight:false, duration:18 },
@@ -229,7 +229,7 @@ const TRACKS = [
       { type:'banner', move:"Rest for talking to 'chainsaw'", duration:18 },
       { type:'data', timing:'4/4', move:'Down and fly',            reps:'6',  highlight:false, duration:27 },
       { type:'data', timing:'1/3', move:'Fast up slow down lat',   reps:'12', highlight:false, duration:28 },
-      { type:'data', timing:'2/2', move:'Front Raise LR RL', reps:'4',  highlight:false, duration:27 },
+      { type:'data', timing:'2/2', move:'Front Raise LR RL', reps:'4',  highlight:false, duration:19 },
     ]
   },
   {
@@ -240,7 +240,7 @@ const TRACKS = [
     weight: 'None',
     startAt: 'Guitars',
     introOffset: 37,
-    totalDuration: 256,
+    totalDuration: 268,
     moves: [
       { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:20 },
       { type:'banner', move:'Hold to verse', duration:9 },
@@ -256,7 +256,7 @@ const TRACKS = [
       { type:'data', timing:'4/4', move:'Slow out in legs',  reps:'4',  highlight:false, duration:19 },
       { type:'banner', move:'Flip over for plank', duration:10 },
       { type:'data', timing:'—',   move:'Plank', cue:'(to vocals end)', reps:'', highlight:false, duration:29 },
-      { type:'data', timing:'1/1', move:'Mountain climbers', cue:'(to end)', reps:'16', highlight:false, duration:19 },
+      { type:'data', timing:'1/1', move:'Mountain climbers', cue:'(to end)', reps:'16', highlight:false, duration:31 },
     ]
   },
   {
@@ -267,7 +267,7 @@ const TRACKS = [
     weight: 'None',
     startAt: 'Vocal',
     introOffset: 16,
-    totalDuration: 208,
+    totalDuration: 216,
     isCooldown: true,
     moves: [
       { type:'data',   move:'Slow stretch and thread needle', duration:20 },
@@ -280,7 +280,7 @@ const TRACKS = [
       { type:'data',   move:'Lean back', cue:"('I had to fall')", duration:10 },
       { type:'banner', move:'Pigeon first side until chorus', duration:33 },
       { type:'banner', move:'Swap legs — chorus', duration:24 },
-      { type:'data',   move:'Forward fold and stretch', duration:23 },
+      { type:'data',   move:'Forward fold and stretch', duration:31 },
     ]
   }
 ];
