@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -38,880 +37,880 @@
     --active-border: #c0392b;
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘Barlow’, sans-serif;
-height: 100vh;
-height: 100dvh;
-overflow: hidden;
-display: flex;
-flex-direction: column;
-padding-left: env(safe-area-inset-left);
-padding-right: env(safe-area-inset-right);
-padding-bottom: env(safe-area-inset-bottom);
--webkit-text-size-adjust: 100%;
-text-size-adjust: 100%;
-touch-action: manipulation;
-}
-
-/* ── WAKE LOCK INDICATOR ── */
-#wake-indicator {
-width: 7px; height: 7px;
-border-radius: 50%;
-background: #333;
-flex-shrink: 0;
-transition: background 0.3s;
-}
-#wake-indicator.active { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
-
-/* ── BIG TAP ZONE ── */
-#tap-zone {
-display: none;
-}
-
-/* ── HEADER ── */
-#header {
-display: flex;
-align-items: center;
-padding: 10px 18px;
-padding-top: max(10px, env(safe-area-inset-top));
-background: var(–surface);
-border-bottom: 2px solid var(–accent2);
-flex-shrink: 0;
-gap: 8px;
-position: relative;
-z-index: 20;
-}
-
-#track-info {
-display: flex;
-flex-direction: column;
-min-width: 0;
-flex: 1;
-overflow: hidden;
-}
-
-#controls-centre {
-position: absolute;
-left: 50%;
-transform: translateX(-50%);
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-#track-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 32px;
-letter-spacing: 2px;
-color: var(–text);
-line-height: 1;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-#song-info {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 15px;
-color: var(–text-dim);
-letter-spacing: 1px;
-text-transform: uppercase;
-margin-top: 2px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-
-/* Dots moved to sub-bar below header */
-#progress-dots {
-display: flex;
-gap: 10px;
-align-items: center;
-flex-shrink: 0;
-}
-
-.dot {
-width: 10px;
-height: 10px;
-border-radius: 50%;
-background: var(–border);
-border: 1px solid #333;
-transition: all 0.3s ease;
-cursor: pointer;
-position: relative;
-background-clip: content-box;
-flex-shrink: 0;
-}
-.dot:hover::after {
-content: attr(data-label);
-position: absolute;
-bottom: 18px;
-left: 50%;
-transform: translateX(-50%);
-background: #222;
-color: var(–text);
-font-size: 10px;
-white-space: nowrap;
-padding: 3px 6px;
-border-radius: 3px;
-font-family: ‘Barlow Condensed’, sans-serif;
-letter-spacing: 0.5px;
-pointer-events: none;
-}
-.dot.done { background: var(–accent2); border-color: var(–accent2); }
-.dot.active { background: var(–accent); border-color: var(–accent); box-shadow: 0 0 6px var(–accent); width: 12px; height: 12px; }
-
-#clock {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 32px;
-color: var(–accent);
-letter-spacing: 2px;
-min-width: 70px;
-text-align: right;
-flex-shrink: 0;
-}
-
-/* ── CONTROLS ── */
-#controls {
-display: flex;
-gap: 12px;
-align-items: center;
-flex-shrink: 0;
-}
-
-.btn {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px;
-font-weight: 700;
-letter-spacing: 1px;
-text-transform: uppercase;
-padding: 6px 12px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-transition: all 0.15s;
-min-height: 40px;
-min-width: 40px;
-white-space: nowrap;
-}
-.btn-primary {
-background: var(–accent);
-color: white;
-padding: 10px 40px;
-font-size: 20px;
-min-height: 56px;
-}
-.btn-primary:hover { background: #e74c3c; }
-.btn-secondary {
-background: transparent;
-color: var(–text-dim);
-border: 1px solid #333;
-font-size: 18px;
-min-height: 48px;
-min-width: 48px;
-}
-.btn-secondary:hover { border-color: var(–text-dim); color: var(–text); }
-.btn-ghost {
-background: transparent;
-color: var(–text-dim);
-font-size: 14px;
-padding: 4px 8px;
-}
-.btn-ghost:hover { color: var(–text); }
-
-/* ── SUB-BAR (dots + meta + clock) ── */
-#sub-bar {
-display: flex;
-align-items: center;
-padding: 8px 18px;
-background: #0a0a0a;
-border-bottom: 2px solid var(–accent2);
-flex-shrink: 0;
-}
-
-#sub-bar-meta {
-display: flex;
-gap: 28px;
-align-items: center;
-justify-content: center;
-flex: 1;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 15px;
-letter-spacing: 1px;
-text-transform: uppercase;
-}
-
-#sub-bar-meta .meta-item { color: var(–text-dim); white-space: nowrap; }
-#sub-bar-meta .meta-item span { color: var(–text); font-weight: 600; }
-
-/* ── MAIN SCROLL AREA ── */
-#scroll-container {
-flex: 1;
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-position: relative;
-}
-
-#scroll-track {
-padding: 0 0 60vh 0;
-}
-
-/* ── ROWS ── */
-.row {
-display: grid;
-grid-template-columns: 220px 1fr 90px;
-border-bottom: 1px solid #111111;
-transition: all 0.4s ease;
-opacity: 0.35;
-position: relative;
-user-select: none;
--webkit-user-select: none;
-}
-
-.row.banner {
-grid-template-columns: 1fr;
-background: var(–banner);
-border-left: 3px solid var(–banner-border);
-opacity: 0.45;
-}
-
-.row.active {
-opacity: 1;
-background: #1a2a1a;
-border-bottom-color: #3a7a3a;
-border-left: 3px solid #4caf50;
-}
-
-.row.active.banner {
-background: #1a2a1a;
-border-left-color: #4caf50;
-border-bottom-color: #3a7a3a;
-opacity: 1;
-}
-
-.row.next {
-opacity: 0.7;
-}
-
-.cell {
-padding: 20px 24px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-}
-
-.cell-timing {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 32px;
-color: var(–text-dim);
-letter-spacing: 1px;
-line-height: 1.1;
-word-break: break-word;
-}
-
-.row.active .cell-timing {
-font-size: 44px;
-color: #ffffff;
-}
-
-.cell-move {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 32px;
-color: #ffffff;
-letter-spacing: 1px;
-line-height: 1.2;
-}
-
-.row.active .cell-move {
-font-size: 44px;
-color: #ffffff;
-}
-
-.cell-cue {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 15px;
-font-weight: 400;
-color: var(–text-dim);
-margin-top: 4px;
-font-style: italic;
-letter-spacing: 0.5px;
-}
-
-.cell-reps {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 42px;
-color: var(–text-dim);
-text-align: center;
-letter-spacing: 1px;
-}
-
-.row.active .cell-reps {
-font-size: 64px;
-color: #4caf50;
-}
-
-.cell-banner {
-padding: 16px 24px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 20px;
-font-weight: 700;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #888;
-}
-
-.row.active .cell-banner {
-font-size: 26px;
-color: #ffffff;
-}
-
-/* ── HEADER ROW ── */
-.row-header {
-display: grid;
-grid-template-columns: 220px 1fr 90px;
-border-bottom: 2px solid var(–accent2);
-opacity: 1 !important;
-background: #0f0f0f;
-}
-
-.cell-header {
-padding: 12px 20px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: var(–text-dim);
-}
-
-.cell-header:last-child { text-align: center; }
-
-.meta-item { color: var(–text-dim); }
-.meta-item span { color: var(–text); font-weight: 600; }
-
-/* ── PROGRESS BAR ── */
-#song-progress-bar {
-height: 3px;
-background: var(–border);
-flex-shrink: 0;
-}
-#song-progress-fill {
-height: 100%;
-background: var(–accent);
-width: 0%;
-transition: width 1s linear;
-}
-
-/* ── TRACK SELECT MODAL ── */
-.calib-badge {
-position: absolute;
-top: 10px;
-right: 12px;
-font-size: 16px;
-line-height: 1;
-opacity: 0.9;
-}
-
-/* ── ROUTINE MENU ── */
-#routine-menu {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.92);
-display: flex;
-align-items: flex-start;
-justify-content: center;
-z-index: 110;
-backdrop-filter: blur(4px);
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
-}
-#routine-menu.hidden { display: none; }
-#routine-menu-inner {
-width: min(700px, 95vw);
-padding: 20px 0;
-}
-#routine-menu-inner h2 {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 28px;
-color: var(–accent);
-margin: 0 0 4px;
-text-align: center;
-}
-#routine-subtitle {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 14px;
-letter-spacing: 3px;
-color: var(–text-dim);
-text-align: center;
-margin-bottom: 24px;
-}
-#routine-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 12px;
-padding: 0 12px;
-}
-.routine-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 4px;
-padding: 24px;
-cursor: pointer;
-transition: all 0.2s;
-position: relative;
-overflow: hidden;
-}
-.routine-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-background: var(–accent);
-transform: scaleY(0);
-transition: transform 0.2s;
-}
-.routine-card:hover { border-color: var(–accent2); background: #161616; }
-.routine-card:hover::before { transform: scaleY(1); }
-.routine-card-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 24px;
-color: var(–text);
-line-height: 1;
-margin-bottom: 8px;
-}
-.routine-card-meta {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 13px;
-letter-spacing: 2px;
-color: var(–text-dim);
-}
-
-#track-select {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.92);
-display: flex;
-align-items: flex-start;
-justify-content: center;
-z-index: 100;
-backdrop-filter: blur(4px);
-overflow-y: auto;
--webkit-overflow-scrolling: touch;
-padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
-}
-
-#track-select.hidden { display: none; }
-
-#track-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 12px;
-max-width: 600px;
-width: 90%;
-padding: 20px;
-}
-
-#track-select h2 {
-margin: 0;
-text-align: center;
-flex: 1;
-}
-#track-select-header {
-display: flex;
-align-items: center;
-margin-bottom: 4px;
-}
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 36px;
-letter-spacing: 3px;
-color: var(–accent);
-margin-bottom: 4px;
-text-align: center;
-grid-column: 1/-1;
-}
-
-#routine-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 36px;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #cccccc;
-text-align: center;
-grid-column: 1/-1;
-margin-bottom: 28px;
-text-shadow:
-3px 3px 0px #444444,
-6px 6px 0px rgba(0, 0, 0, 0.5);
-line-height: 1.1;
-}
-
-.track-card {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 4px;
-padding: 20px 24px;
-cursor: pointer;
-transition: all 0.2s;
-position: relative;
-overflow: hidden;
-min-height: 80px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-.track-card-text {
-flex: 1;
-}
-.track-card-icon {
-width: 64px;
-height: 64px;
-object-fit: contain;
-flex-shrink: 0;
-margin-left: 16px;
-opacity: 0.9;
-}
-
-.track-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-background: var(–accent);
-transform: scaleY(0);
-transition: transform 0.2s;
-}
-
-.track-card:hover {
-border-color: var(–accent2);
-background: #161616;
-}
-.track-card:hover::before { transform: scaleY(1); }
-
-.track-card-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 11px;
-letter-spacing: 2px;
-color: var(–text-dim);
-margin-bottom: 4px;
-}
-
-.track-card-name {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-letter-spacing: 1px;
-color: var(–text);
-line-height: 1;
-}
-
-.track-card-song {
-font-size: 12px;
-color: var(–text-dim);
-margin-top: 4px;
-font-family: ‘Barlow Condensed’, sans-serif;
-letter-spacing: 0.5px;
-}
-
-/* ── COUNTDOWN OVERLAY ── */
-#countdown-overlay {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.85);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-z-index: 50;
-backdrop-filter: blur(2px);
-}
-#countdown-overlay.hidden { display: none; }
-
-/* ── BREAK HOLDING SCREEN ── */
-#break-screen {
-position: fixed;
-inset: 0;
-background: #0a0a0a;
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 40;
-flex-direction: column;
-}
-#break-screen.hidden { display: none; }
-#break-content {
-text-align: center;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 12px;
-}
-#break-label {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 18px;
-letter-spacing: 4px;
-color: var(–text-dim);
-}
-#break-next-label {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
-letter-spacing: 3px;
-color: var(–text-dim);
-margin-top: 16px;
-}
-#break-next-track {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 72px;
-color: var(–text);
-line-height: 1;
-letter-spacing: 2px;
-}
-#break-timer {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 120px;
-color: var(–accent);
-line-height: 1;
-margin-top: 8px;
-}
-#break-bar-wrap {
-width: 300px;
-height: 4px;
-background: var(–border);
-border-radius: 2px;
-margin-top: 8px;
-overflow: hidden;
-}
-#break-bar {
-height: 100%;
-background: var(–accent);
-width: 100%;
-transition: width 1s linear;
-}
-#btn-autoplay.active {
-background: var(–accent);
-color: #000;
-border-color: var(–accent);
-}
-
-#countdown-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 160px;
-color: var(–accent);
-line-height: 1;
-animation: pulse-num 1s ease-in-out infinite;
-}
-
-#countdown-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 18px;
-letter-spacing: 3px;
-text-transform: uppercase;
-color: var(–text-dim);
-margin-top: 8px;
-}
-
-@keyframes pulse-num {
-0%, 100% { transform: scale(1); }
-50% { transform: scale(1.06); }
-}
-
-/* ── NEXT MOVE COUNTDOWN ── */
-#next-move-countdown {
-position: fixed;
-bottom: 80px;
-left: 50%;
-transform: translateX(-50%);
-background: #1a1400;
-border: 3px solid #f0a500;
-border-radius: 8px;
-padding: 18px 42px;
-text-align: center;
-z-index: 15;
-pointer-events: none;
-opacity: 0;
-transition: opacity 0.3s ease;
-}
-#next-move-countdown.visible { opacity: 1; }
-
-#nmc-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 18px;
-letter-spacing: 2px;
-text-transform: uppercase;
-color: #f0a500;
-margin-bottom: 3px;
-}
-#nmc-move {
-font-family: ‘Barlow’, sans-serif;
-font-size: 30px;
-font-weight: 700;
-color: #ffffff;
-}
-#nmc-secs {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-letter-spacing: 2px;
-color: #f0a500;
-margin-top: 3px;
-}
-
-/* Long-press jump indicator */
-.row.jump-ready {
-background: #0a1a0a !important;
-border-left-color: #4caf50 !important;
-transition: background 0.4s ease;
-}
-body.calibrating #tap-zone { pointer-events: none; }
-
-#calib-bar {
-display: none;
-align-items: center;
-gap: 12px;
-padding: 10px 20px;
-background: #1a1000;
-border-bottom: 2px solid #c87000;
-flex-shrink: 0;
-z-index: 15;
-position: relative;
-}
-#calib-bar.visible { display: flex; }
-
-#calib-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 13px;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-color: #c87000;
-flex: 1;
-}
-#calib-label strong { color: #ffaa00; }
-
-#calib-next-btn {
-background: #c87000;
-color: #000;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-letter-spacing: 2px;
-padding: 10px 28px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-min-height: 52px;
-min-width: 160px;
-transition: background 0.1s;
-}
-#calib-next-btn:active { background: #ffaa00; transform: scale(0.97); }
-
-#calib-save-btn {
-background: #2ecc71;
-color: #000;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-font-weight: 700;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-padding: 10px 22px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-min-height: 52px;
-display: none;
-}
-#calib-save-btn.visible { display: block; }
-
-/* Calibrated rows get a small timestamp badge */
-.row .calib-stamp {
-display: none;
-position: absolute;
-top: 4px; right: 6px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 11px;
-color: #c87000;
-letter-spacing: 1px;
-}
-body.calibrating .row .calib-stamp { display: block; }
-
-/* Calibration result modal */
-#calib-result {
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.95);
-z-index: 200;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: flex-start;
-padding: 30px 24px;
-overflow-y: auto;
-display: none;
-}
-#calib-result.visible { display: flex; }
-#calib-result h2 {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 30px;
-letter-spacing: 3px;
-color: #ffaa00;
-margin-bottom: 8px;
-}
-#calib-result p {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 14px;
-color: var(–text-dim);
-margin-bottom: 20px;
-text-align: center;
-letter-spacing: 0.5px;
-line-height: 1.5;
-}
-#calib-result pre {
-background: #111;
-border: 1px solid #333;
-border-radius: 4px;
-padding: 16px;
-font-size: 12px;
-color: #aaffaa;
-width: 100%;
-max-width: 700px;
-overflow-x: auto;
-white-space: pre-wrap;
-word-break: break-all;
-font-family: ‘Courier New’, monospace;
-line-height: 1.6;
-margin-bottom: 16px;
-}
-#calib-result .calib-actions {
-display: flex;
-gap: 12px;
-flex-wrap: wrap;
-justify-content: center;
-margin-top: 8px;
-}
-
-/* ── LANDSCAPE / LARGE SCREEN TWEAKS ── */
-@media (orientation: landscape) and (min-width: 900px) {
-.row { grid-template-columns: 240px 1fr 100px; }
-.row-header { grid-template-columns: 240px 1fr 100px; }
-.cell-timing { font-size: 34px; }
-.row.active .cell-timing { font-size: 42px; }
-.cell-move { font-size: 28px; }
-.row.active .cell-move { font-size: 40px; }
-.cell-reps { font-size: 46px; }
-.row.active .cell-reps { font-size: 70px; }
-.cell-banner { font-size: 22px; }
-.row.active .cell-banner { font-size: 28px; }
-}
-
-/* ── PORTRAIT / SMALL SCREEN ── */
-@media (max-width: 600px) {
-.row { grid-template-columns: 140px 1fr 70px; }
-.row-header { grid-template-columns: 140px 1fr 70px; }
-#track-name { font-size: 22px; }
-#song-info { font-size: 11px; }
-#progress-dots { display: none; }
-#clock { font-size: 24px; }
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+  }
+
+  /* ── WAKE LOCK INDICATOR ── */
+  #wake-indicator {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #333;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  #wake-indicator.active { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
+
+  /* ── BIG TAP ZONE ── */
+  #tap-zone {
+    display: none;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent2);
+    flex-shrink: 0;
+    gap: 8px;
+    position: relative;
+    z-index: 20;
+  }
+
+  #track-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  #controls-centre {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #track-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--text);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #song-info {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Dots moved to sub-bar below header */
+  #progress-dots {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    background-clip: content-box;
+    flex-shrink: 0;
+  }
+  .dot:hover::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: var(--text);
+    font-size: 10px;
+    white-space: nowrap;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+  .dot.done { background: var(--accent2); border-color: var(--accent2); }
+  .dot.active { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px var(--accent); width: 12px; height: 12px; }
+
+  #clock {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    min-width: 70px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── CONTROLS ── */
+  #controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-height: 40px;
+    min-width: 40px;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 10px 40px;
+    font-size: 20px;
+    min-height: 56px;
+  }
+  .btn-primary:hover { background: #e74c3c; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid #333;
+    font-size: 18px;
+    min-height: 48px;
+    min-width: 48px;
+  }
+  .btn-secondary:hover { border-color: var(--text-dim); color: var(--text); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+  .btn-ghost:hover { color: var(--text); }
+
+  /* ── SUB-BAR (dots + meta + clock) ── */
+  #sub-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px 18px;
+    background: #0a0a0a;
+    border-bottom: 2px solid var(--accent2);
+    flex-shrink: 0;
+  }
+
+  #sub-bar-meta {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  #sub-bar-meta .meta-item { color: var(--text-dim); white-space: nowrap; }
+  #sub-bar-meta .meta-item span { color: var(--text); font-weight: 600; }
+
+  /* ── MAIN SCROLL AREA ── */
+  #scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  #scroll-track {
+    padding: 0 0 60vh 0;
+  }
+
+  /* ── ROWS ── */
+  .row {
+    display: grid;
+    grid-template-columns: 220px 1fr 90px;
+    border-bottom: 1px solid #111111;
+    transition: all 0.4s ease;
+    opacity: 0.35;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .row.banner {
+    grid-template-columns: 1fr;
+    background: var(--banner);
+    border-left: 3px solid var(--banner-border);
+    opacity: 0.45;
+  }
+
+  .row.active {
+    opacity: 1;
+    background: #1a2a1a;
+    border-bottom-color: #3a7a3a;
+    border-left: 3px solid #4caf50;
+  }
+
+  .row.active.banner {
+    background: #1a2a1a;
+    border-left-color: #4caf50;
+    border-bottom-color: #3a7a3a;
+    opacity: 1;
+  }
+
+  .row.next {
+    opacity: 0.7;
+  }
+
+  .cell {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cell-timing {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    word-break: break-word;
+  }
+
+  .row.active .cell-timing {
+    font-size: 44px;
+    color: #ffffff;
+  }
+
+  .cell-move {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+
+  .row.active .cell-move {
+    font-size: 44px;
+    color: #ffffff;
+  }
+
+  .cell-cue {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
+
+  .cell-reps {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .row.active .cell-reps {
+    font-size: 64px;
+    color: #4caf50;
+  }
+
+  .cell-banner {
+    padding: 16px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .row.active .cell-banner {
+    font-size: 26px;
+    color: #ffffff;
+  }
+
+  /* ── HEADER ROW ── */
+  .row-header {
+    display: grid;
+    grid-template-columns: 220px 1fr 90px;
+    border-bottom: 2px solid var(--accent2);
+    opacity: 1 !important;
+    background: #0f0f0f;
+  }
+
+  .cell-header {
+    padding: 12px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .cell-header:last-child { text-align: center; }
+
+  .meta-item { color: var(--text-dim); }
+  .meta-item span { color: var(--text); font-weight: 600; }
+
+  /* ── PROGRESS BAR ── */
+  #song-progress-bar {
+    height: 3px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  #song-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 1s linear;
+  }
+
+  /* ── TRACK SELECT MODAL ── */
+  .calib-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.9;
+  }
+
+  /* ── ROUTINE MENU ── */
+  #routine-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 110;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
+  }
+  #routine-menu.hidden { display: none; }
+  #routine-menu-inner {
+    width: min(700px, 95vw);
+    padding: 20px 0;
+  }
+  #routine-menu-inner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    margin: 0 0 4px;
+    text-align: center;
+  }
+  #routine-subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  #routine-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 12px;
+  }
+  .routine-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .routine-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+  .routine-card:hover { border-color: var(--accent2); background: #161616; }
+  .routine-card:hover::before { transform: scaleY(1); }
+  .routine-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .routine-card-meta {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  #track-select {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: max(20px, env(safe-area-inset-top)) 0 max(20px, env(safe-area-inset-bottom));
+  }
+
+  #track-select.hidden { display: none; }
+
+  #track-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    width: 90%;
+    padding: 20px;
+  }
+
+  #track-select h2 {
+    margin: 0;
+    text-align: center;
+    flex: 1;
+  }
+  #track-select-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 4px;
+    text-align: center;
+    grid-column: 1/-1;
+  }
+
+  #routine-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #cccccc;
+    text-align: center;
+    grid-column: 1/-1;
+    margin-bottom: 28px;
+    text-shadow:
+      3px 3px 0px #444444,
+      6px 6px 0px rgba(0, 0, 0, 0.5);
+    line-height: 1.1;
+  }
+
+  .track-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .track-card-text {
+    flex: 1;
+  }
+  .track-card-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-left: 16px;
+    opacity: 0.9;
+  }
+
+  .track-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.2s;
+  }
+
+  .track-card:hover {
+    border-color: var(--accent2);
+    background: #161616;
+  }
+  .track-card:hover::before { transform: scaleY(1); }
+
+  .track-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .track-card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .track-card-song {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── COUNTDOWN OVERLAY ── */
+  #countdown-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  #countdown-overlay.hidden { display: none; }
+
+  /* ── BREAK HOLDING SCREEN ── */
+  #break-screen {
+    position: fixed;
+    inset: 0;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+    flex-direction: column;
+  }
+  #break-screen.hidden { display: none; }
+  #break-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  #break-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+  }
+  #break-next-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+  #break-next-track {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  #break-timer {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: var(--accent);
+    line-height: 1;
+    margin-top: 8px;
+  }
+  #break-bar-wrap {
+    width: 300px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  #break-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 100%;
+    transition: width 1s linear;
+  }
+  #btn-autoplay.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  #countdown-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    color: var(--accent);
+    line-height: 1;
+    animation: pulse-num 1s ease-in-out infinite;
+  }
+
+  #countdown-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  @keyframes pulse-num {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* ── NEXT MOVE COUNTDOWN ── */
+  #next-move-countdown {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1400;
+    border: 3px solid #f0a500;
+    border-radius: 8px;
+    padding: 18px 42px;
+    text-align: center;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #next-move-countdown.visible { opacity: 1; }
+
+  #nmc-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f0a500;
+    margin-bottom: 3px;
+  }
+  #nmc-move {
+    font-family: 'Barlow', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  #nmc-secs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #f0a500;
+    margin-top: 3px;
+  }
+
+  /* Long-press jump indicator */
+  .row.jump-ready {
+    background: #0a1a0a !important;
+    border-left-color: #4caf50 !important;
+    transition: background 0.4s ease;
+  }
+  body.calibrating #tap-zone { pointer-events: none; }
+
+  #calib-bar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: #1a1000;
+    border-bottom: 2px solid #c87000;
+    flex-shrink: 0;
+    z-index: 15;
+    position: relative;
+  }
+  #calib-bar.visible { display: flex; }
+
+  #calib-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c87000;
+    flex: 1;
+  }
+  #calib-label strong { color: #ffaa00; }
+
+  #calib-next-btn {
+    background: #c87000;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 52px;
+    min-width: 160px;
+    transition: background 0.1s;
+  }
+  #calib-next-btn:active { background: #ffaa00; transform: scale(0.97); }
+
+  #calib-save-btn {
+    background: #2ecc71;
+    color: #000;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 52px;
+    display: none;
+  }
+  #calib-save-btn.visible { display: block; }
+
+  /* Calibrated rows get a small timestamp badge */
+  .row .calib-stamp {
+    display: none;
+    position: absolute;
+    top: 4px; right: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: #c87000;
+    letter-spacing: 1px;
+  }
+  body.calibrating .row .calib-stamp { display: block; }
+
+  /* Calibration result modal */
+  #calib-result {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 24px;
+    overflow-y: auto;
+    display: none;
+  }
+  #calib-result.visible { display: flex; }
+  #calib-result h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 3px;
+    color: #ffaa00;
+    margin-bottom: 8px;
+  }
+  #calib-result p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+  }
+  #calib-result pre {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 16px;
+    font-size: 12px;
+    color: #aaffaa;
+    width: 100%;
+    max-width: 700px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: 'Courier New', monospace;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  #calib-result .calib-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  /* ── LANDSCAPE / LARGE SCREEN TWEAKS ── */
+  @media (orientation: landscape) and (min-width: 900px) {
+    .row { grid-template-columns: 240px 1fr 100px; }
+    .row-header { grid-template-columns: 240px 1fr 100px; }
+    .cell-timing { font-size: 34px; }
+    .row.active .cell-timing { font-size: 42px; }
+    .cell-move { font-size: 28px; }
+    .row.active .cell-move { font-size: 40px; }
+    .cell-reps { font-size: 46px; }
+    .row.active .cell-reps { font-size: 70px; }
+    .cell-banner { font-size: 22px; }
+    .row.active .cell-banner { font-size: 28px; }
+  }
+
+  /* ── PORTRAIT / SMALL SCREEN ── */
+  @media (max-width: 600px) {
+    .row { grid-template-columns: 140px 1fr 70px; }
+    .row-header { grid-template-columns: 140px 1fr 70px; }
+    #track-name { font-size: 22px; }
+    #song-info { font-size: 11px; }
+    #progress-dots { display: none; }
+    #clock { font-size: 24px; }
+  }
 
 </style>
 </head>
@@ -921,7 +920,6 @@ margin-top: 8px;
 <script src="routines/bodypump-10.js"></script>
 
 <!-- Routine Menu -->
-
 <div id="routine-menu">
   <div id="routine-menu-inner">
     <h2>BodyPump</h2>
@@ -931,7 +929,6 @@ margin-top: 8px;
 </div>
 
 <!-- Track Select Modal -->
-
 <div id="track-select" class="hidden">
   <div id="track-grid">
     <h2>BodyPump</h2>
@@ -939,27 +936,23 @@ margin-top: 8px;
 </div>
 
 <!-- Countdown Overlay -->
-
 <div id="countdown-overlay" class="hidden">
   <div id="countdown-num">10</div>
   <div id="countdown-label">Starting track…</div>
 </div>
 
 <!-- Break Holding Screen -->
-
-<div id="break-screen" class="hidden" onclick="dismissBreakScreen()" style="cursor:pointer;">
+<div id="break-screen" class="hidden">
   <div id="break-content">
     <div id="break-label">CHANGE WEIGHT · DRINK WATER</div>
     <div id="break-next-label">GET READY FOR</div>
     <div id="break-next-track"></div>
     <div id="break-timer"></div>
     <div id="break-bar-wrap"><div id="break-bar"></div></div>
-    <div style="margin-top:24px;font-size:12px;letter-spacing:3px;opacity:0.4;font-family:'Bebas Neue',sans-serif;">TAP TO SKIP</div>
   </div>
 </div>
 
 <!-- Header -->
-
 <div id="header">
   <div id="track-info">
     <div id="track-name">—</div>
@@ -979,7 +972,6 @@ margin-top: 8px;
 </div>
 
 <!-- Sub-bar: dots + clock -->
-
 <div id="sub-bar">
   <div id="progress-dots"></div>
   <div id="sub-bar-meta" id="track-meta-strip"></div>
@@ -987,11 +979,9 @@ margin-top: 8px;
 </div>
 
 <!-- Song progress bar -->
-
 <div id="song-progress-bar"><div id="song-progress-fill"></div></div>
 
 <!-- Calibration bar (shown in calibration mode) -->
-
 <div id="calib-bar">
   <div id="calib-label">🎯 Calibration — <strong id="calib-move-name">—</strong></div>
   <button id="calib-save-btn" onclick="finishCalibration()">Save timestamps</button>
@@ -999,7 +989,6 @@ margin-top: 8px;
 </div>
 
 <!-- Calibration result modal -->
-
 <div id="calib-result">
   <h2>Calibration Complete</h2>
   <p>Copy these durations into the TRACKS data for <strong id="calib-result-track"></strong>.<br>Replace the existing <code>duration</code> values for each move.</p>
@@ -1011,7 +1000,6 @@ margin-top: 8px;
 </div>
 
 <!-- Scroll area -->
-
 <div id="scroll-container" style="position:relative;">
   <div id="tap-zone" onclick="handleTapZone()"></div>
   <div id="scroll-track">
@@ -1027,7 +1015,6 @@ margin-top: 8px;
 </div>
 
 <!-- Next move countdown -->
-
 <div id="next-move-countdown">
   <div id="nmc-label">Next Move</div>
   <div id="nmc-move">—</div>
@@ -1936,6 +1923,5 @@ setTimeout(() => {
   document.getElementById('track-select').classList.add('hidden');
 }, 0);
 </script>
-
 </body>
 </html>
