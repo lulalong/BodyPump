@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BodyPump Routine Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0a0a0a;--surface:#111;--surface2:#181818;--border:#2a2a2a;--accent:#c0392b;--accent2:#8e1c14;--text:#f0f0f0;--text-dim:#777;--text-mid:#aaa;--green:#27ae60;--yellow:#f39c12; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:80px;}
+  header{background:var(--surface);border-bottom:2px solid var(--accent);padding:20px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--accent);}
+  header span{font-size:13px;color:var(--text-dim);letter-spacing:1px;}
+  .container{max-width:960px;margin:0 auto;padding:24px;}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px;}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--accent);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  label{display:block;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;margin-top:14px;}
+  label:first-child{margin-top:0;}
+  input[type="text"],input[type="number"],select,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;appearance:none;}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);}
+  select option{background:#1a1a1a;}
+  .row{display:grid;gap:12px;} .row-2{grid-template-columns:1fr 1fr;} .row-3{grid-template-columns:1fr 1fr 1fr;}
+  .btn{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:14px;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;transition:all 0.15s;}
+  .btn-primary{background:var(--accent);color:white;} .btn-primary:hover{background:var(--accent2);}
+  .btn-secondary{background:var(--surface2);color:var(--text-mid);border:1px solid var(--border);} .btn-secondary:hover{border-color:var(--text-dim);color:var(--text);}
+  .btn-danger{background:transparent;color:#c0392b;border:1px solid #c0392b44;font-size:12px;padding:6px 12px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;cursor:pointer;border-radius:4px;} .btn-danger:hover{background:#c0392b22;}
+  .btn-green{background:var(--green);color:white;} .btn-green:hover{background:#219a52;}
+  .btn-sm{font-size:12px;padding:6px 12px;}
+  .track-list{display:flex;flex-direction:column;gap:12px;}
+  .track-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .track-header{display:flex;align-items:center;padding:12px 16px;gap:12px;cursor:pointer;user-select:none;}
+  .track-header:hover{background:#1e1e1e;}
+  .track-num{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);width:28px;flex-shrink:0;}
+  .track-label{flex:1;} .track-label strong{display:block;font-size:14px;font-weight:600;} .track-label span{font-size:12px;color:var(--text-dim);}
+  .track-toggle{font-size:18px;color:var(--text-dim);transition:transform 0.2s;} .track-toggle.open{transform:rotate(180deg);}
+  .track-body{display:none;padding:16px;border-top:1px solid var(--border);} .track-body.open{display:block;}
+  .moves-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .move-row{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:8px 10px;display:grid;grid-template-columns:120px 1fr 65px auto 28px;gap:6px;align-items:center;}
+  .move-row.is-banner{grid-template-columns:80px 1fr 64px auto 28px;background:#1a1200;border-color:#3a2a00;}
+  .move-row select,.move-row input{margin:0;font-size:13px;padding:6px 8px;}
+  .move-badge{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;padding:3px 7px;border-radius:3px;text-align:center;}
+  .move-badge.data{background:var(--accent);color:white;} .move-badge.banner{background:var(--yellow);color:#000;}
+  .hl-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:4px;background:transparent;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0;}
+  .hl-btn.active{background:var(--accent);border-color:var(--accent);}
+  .move-actions{display:flex;gap:3px;}
+  .icon-btn{width:26px;height:26px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);color:var(--text-dim);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all 0.15s;} .icon-btn:hover{border-color:var(--text-dim);color:var(--text);}
+  .add-move-btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .output-box{background:#050505;border:1px solid var(--border);border-radius:4px;padding:16px;font-family:'Courier New',monospace;font-size:12px;color:#7ec8a0;white-space:pre-wrap;max-height:280px;overflow-y:auto;line-height:1.6;cursor:text;user-select:all;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .hint{font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-top:5px;}
+  hr{border:none;border-top:1px solid var(--border);margin:20px 0;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Routine Builder</h1>
+  <span>BodyPump Teleprompter</span>
+</header>
+<div class="container">
+  <div class="section">
+    <div class="section-title">Routine Info</div>
+    <div class="row row-2">
+      <div><label>Routine Name</label><input type="text" id="routineName" placeholder="e.g. Nu Metal Faves"></div>
+      <div><label>Font Style</label>
+        <select id="routineFont">
+          <option value="">Standard (Bebas Neue)</option>
+          <option value="Metal Mania">Metal Mania</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Tracks</div>
+    <div class="track-list" id="trackList"></div>
+    <div style="margin-top:16px;"><button class="btn btn-secondary btn-sm" onclick="addTrack()">+ Add Track</button></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Generate File</div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="generateCode()">Generate .js</button>
+      <button class="btn btn-green" onclick="downloadFile()" id="downloadBtn" style="display:none">⬇ Download</button>
+      <button class="btn btn-secondary" onclick="copyToClipboard()" id="copyBtn" style="display:none">⧉ Copy All</button>
+      <span id="generateStatus" style="font-size:13px;color:var(--text-dim);"></span>
+    </div>
+    <div id="outputBox" style="display:none;margin-top:14px;">
+      <div class="output-box" id="outputCode" title="Click to select all"></div>
+      <div class="hint">CLICK CODE TO SELECT ALL · THEN USE COPY ALL OR ⌘C/CTRL+C</div>
+    </div>
+    <hr>
+    <div class="section-title">Import Existing Routine</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Paste a previously generated .js file to reload it for editing.</p>
+    <textarea id="importBox" rows="5" placeholder="Paste .js file contents here…" style="font-family:monospace;font-size:12px;resize:vertical;"></textarea>
+    <div style="margin-top:8px;display:flex;gap:10px;align-items:center;">
+      <button class="btn btn-secondary" onclick="importRoutine()">Import</button>
+      <span id="importStatus" style="font-size:13px;color:var(--text-dim);"></span>
+    </div>
+  </div>
+</div>
+<datalist id="movesSuggestions">
+  <option value="Slow bicep curl"><option value="Medium bicep curl"><option value="Fast stagger curl"><option value="Slow stagger curl"><option value="Super slow curl"><option value="Super slow curl intro"><option value="Slow curl"><option value="Medium curl"><option value="Med curl, stagger down on 2nd"><option value="Pulse"><option value="Pulses"><option value="Pulses middle"><option value="Pulse at bottom"><option value="Pulse short"><option value="Stagger"><option value="Stagger squat"><option value="Stagger down float up"><option value="Stagger dip"><option value="Stagger press"><option value="Super slow squat"><option value="Super slow squat intro"><option value="Super slow squat to end"><option value="Medium squat"><option value="Medium squats"><option value="Fast down slow up squat"><option value="Bottom bounce"><option value="Bottom pulses"><option value="Slow lunge"><option value="Medium lunge"><option value="Medium lunge (pockets)"><option value="Slow stagger lunge"><option value="Fwd alt step lunge"><option value="Lunge left"><option value="Lunge right"><option value="Bounce sockets"><option value="Swap legs for chorus"><option value="Slow press"><option value="Medium press"><option value="Single and skullcrusher"><option value="Chest press"><option value="Down and fly"><option value="Down and triple row"><option value="Flip to push-ups"><option value="Slow overhead extension"><option value="Medium overhead extension"><option value="Slow tricep dip"><option value="Medium dip"><option value="Single dips"><option value="Super slow dip"><option value="Lateral raise"><option value="Lat raises"><option value="Front Raise LR RL"><option value="Alt front side front down"><option value="Double front vertical pump"><option value="Fast up on 2, slow down"><option value="Upright Row"><option value="Upright rows"><option value="RDL row, then C&P"><option value="Slow RDL"><option value="Medium RDL"><option value="Super slow RDL"><option value="Fast down slow up, Stagger RDL"><option value="Doubles RDL row, clean &amp; press"><option value="Dead lift slow"><option value="Awkward D lift"><option value="D lift rows"><option value="D Lift single row"><option value="Slow Clean and Press"><option value="Clean and press"><option value="Slow crunch"><option value="Crunch"><option value="Side crunch pulses"><option value="Crunch pulse"><option value="Bicycles"><option value="Mountain climbers"><option value="Dead bugs"><option value="Plank"><option value="Plank to fail"><option value="Flip to plank after crosses"><option value="Flip over for plank"><option value="Slow out in legs"><option value="Out in feet, alt start side"><option value="Ankle raises"><option value="Lean back"><option value="Hold"><option value="Stretches — follow your body"><option value="Forward fold and stretch"><option value="Runners lunge and chest stretch"><option value="Runners lunge and tricep stretch"><option value="Pigeon first side until chorus"><option value="Chorus — cat cows"><option value="Slow stretch and thread needle"><option value="Repeat other side"><option value="Switch sides">
+</datalist>
+<datalist id="timingSuggestions">
+  <option value="8/8"><option value="4/4"><option value="2/2"><option value="1/1">
+  <option value="1/1/1/1"><option value="1/3"><option value="1/1/2"><option value="2/2/2/2">
+  <option value="4/4/4/4"><option value="6/4"><option value="6/2"><option value="2/1/1/2">
+  <option value="2/1/1/1/3"><option value="1/1/1/1/4/4"><option value="4/4/4/4">
+</datalist>
+<script>
+const TRACK_TYPES=[{id:'warmup',name:'Warm Up'},{id:'squats',name:'Squats'},{id:'chest',name:'Chest'},{id:'back',name:'Back'},{id:'biceps',name:'Biceps'},{id:'triceps',name:'Triceps'},{id:'lunges',name:'Lunges'},{id:'shoulders',name:'Shoulders'},{id:'core',name:'Core'},{id:'cooldown',name:'Cooldown'}];
+const DEFAULT_BREAKS={warmup:60,squats:60,chest:60,back:60,biceps:60,triceps:60,lunges:60,shoulders:60,core:null,cooldown:null};
+const TIMINGS=['','8/8','4/4','2/2','1/1','1/1/1/1','1/3','1/1/2','2/2/2/2','4/4/4/4','6/4','2/1/1/1/3'];
+let tracks=[],openTracks=new Set(),generatedCode='';
+
+function addTrack(){
+  const used=tracks.map(t=>t.id);
+  const next=TRACK_TYPES.find(t=>!used.includes(t.id))||TRACK_TYPES[0];
+  tracks.push({id:next.id,song:'',artist:'',weight:'',startAt:'',introOffset:15,totalDuration:240,breakAfter:DEFAULT_BREAKS[next.id]??60,moves:[]});
+  renderTracks();
+  openTracks.add(tracks.length-1);
+  renderTracks();
+}
+function removeTrack(i){if(!confirm('Remove this track?'))return;tracks.splice(i,1);openTracks=new Set([...openTracks].filter(x=>x<tracks.length));renderTracks();}
+function moveTrackUp(i){if(i===0)return;[tracks[i-1],tracks[i]]=[tracks[i],tracks[i-1]];renderTracks();}
+function moveTrackDown(i){if(i===tracks.length-1)return;[tracks[i],tracks[i+1]]=[tracks[i+1],tracks[i]];renderTracks();}
+
+function addMove(ti,type='data'){
+  tracks[ti].moves.push(type==='banner'?{type:'banner',move:'',duration:8}:{type:'data',timing:'',move:'',reps:'',highlight:false,duration:16});
+  renderTracks();
+}
+function removeMove(ti,mi){tracks[ti].moves.splice(mi,1);renderTracks();}
+function moveMoveUp(ti,mi){if(mi===0)return;const m=tracks[ti].moves;[m[mi-1],m[mi]]=[m[mi],m[mi-1]];renderTracks();}
+function moveMoveDown(ti,mi){const m=tracks[ti].moves;if(mi===m.length-1)return;[m[mi],m[mi+1]]=[m[mi+1],m[mi]];renderTracks();}
+function duplicateMove(ti,mi){tracks[ti].moves.splice(mi+1,0,JSON.parse(JSON.stringify(tracks[ti].moves[mi])));renderTracks();}
+
+function toggleTrack(i){openTracks.has(i)?openTracks.delete(i):openTracks.add(i);renderTracks();}
+
+function updateTrackField(i,f,v){
+  if(f==='id'){tracks[i].id=v;tracks[i].breakAfter=DEFAULT_BREAKS[v]??60;}
+  else if(f==='breakAfter'){tracks[i].breakAfter=(v===''||v==='null')?null:parseInt(v);}
+  else if(f==='introOffset'||f==='totalDuration'){tracks[i][f]=parseInt(v)||0;}
+  else{tracks[i][f]=v;}
+}
+function updateMoveField(ti,mi,f,v){
+  if(f==='highlight'){tracks[ti].moves[mi].highlight=!tracks[ti].moves[mi].highlight;}
+  else if(f==='duration'){tracks[ti].moves[mi].duration=parseInt(v)||0;}
+  else{tracks[ti].moves[mi][f]=v;}
+}
+function parseDuration(i,v){
+  const p=v.split(':');
+  if(p.length===2){
+    const total=(parseInt(p[0])||0)*60+(parseInt(p[1])||0);
+    tracks[i].totalDuration=total;
+    const el=document.getElementById('dur-secs-'+i);
+    if(el)el.textContent=total;
+  }
+}
+function esc(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function timingSelect(ti,mi,current){
+  return `<input type="text" list="timingSuggestions" placeholder="e.g. 4/4" value="${esc(current)}" style="font-size:13px;" oninput="updateMoveField(${ti},${mi},'timing',this.value)">`;
+}
+
+function renderTracks(){
+  const list=document.getElementById('trackList');
+  if(!tracks.length){list.innerHTML='<div style="color:var(--text-dim);font-size:13px;padding:8px 0;">No tracks yet. Click "+ Add Track" to begin.</div>';return;}
+  list.innerHTML=tracks.map((t,i)=>{
+    const type=TRACK_TYPES.find(tt=>tt.id===t.id);
+    const isOpen=openTracks.has(i);
+    const movesHTML=t.moves.map((m,mi)=>{
+      if(m.type==='banner')return`<div class="move-row is-banner" style="grid-template-columns:80px 1fr auto 28px;">
+        <span class="move-badge banner">BANNER</span>
+        <input type="text" list="movesSuggestions" placeholder="Banner text…" value="${esc(m.move)}" oninput="updateMoveField(${i},${mi},'move',this.value)">
+        <div class="move-actions">
+          <button class="icon-btn" onclick="moveMoveUp(${i},${mi})" title="Up">↑</button>
+          <button class="icon-btn" onclick="moveMoveDown(${i},${mi})" title="Down">↓</button>
+          <button class="icon-btn" onclick="duplicateMove(${i},${mi})" title="Duplicate">⧉</button>
+        </div>
+        <button class="btn-danger" onclick="removeMove(${i},${mi})">✕</button>
+      </div>`;
+      return`<div class="move-row">
+        ${timingSelect(i,mi,m.timing)}
+        <input type="text" list="movesSuggestions" placeholder="Move name…" value="${esc(m.move)}" oninput="updateMoveField(${i},${mi},'move',this.value)">
+        <input type="text" placeholder="e.g. 8" value="${esc(m.reps)}" oninput="updateMoveField(${i},${mi},'reps',this.value)">
+        <div class="move-actions">
+          <button class="icon-btn" onclick="moveMoveUp(${i},${mi})">↑</button>
+          <button class="icon-btn" onclick="moveMoveDown(${i},${mi})">↓</button>
+          <button class="icon-btn" onclick="duplicateMove(${i},${mi})" title="Duplicate">⧉</button>
+        </div>
+        <button class="btn-danger" onclick="removeMove(${i},${mi})">✕</button>
+      </div>`;
+    }).join('');
+    return`<div class="track-card">
+      <div class="track-header" onclick="toggleTrack(${i})">
+        <div class="track-num">${i+1}</div>
+        <div class="track-label"><strong>${type?type.name:t.id}</strong><span>${t.artist&&t.song?t.artist+' — '+t.song:'—'}</span></div>
+        <div style="display:flex;gap:6px;margin-right:8px;" onclick="event.stopPropagation()">
+          <button class="icon-btn" onclick="moveTrackUp(${i})">↑</button>
+          <button class="icon-btn" onclick="moveTrackDown(${i})">↓</button>
+          <button class="btn-danger" onclick="removeTrack(${i})">✕</button>
+        </div>
+        <div class="track-toggle${isOpen?' open':''}">▾</div>
+      </div>
+      <div class="track-body${isOpen?' open':''}">
+        <div class="row row-2" style="margin-bottom:12px;">
+          <div><label>Track Type</label>
+            <select onchange="updateTrackField(${i},'id',this.value);renderTracks()">
+              ${TRACK_TYPES.map(tt=>`<option value="${tt.id}"${tt.id===t.id?' selected':''}>${tt.name}</option>`).join('')}
+            </select>
+          </div>
+          <div><label>Break After (secs, blank=none)</label>
+            <input type="number" placeholder="e.g. 60" value="${t.breakAfter??''}" oninput="updateTrackField(${i},'breakAfter',this.value)">
+          </div>
+        </div>
+        <div class="row row-2" style="margin-bottom:12px;">
+          <div><label>Song Title</label><input type="text" placeholder="Song name" value="${esc(t.song)}" oninput="updateTrackField(${i},'song',this.value)"></div>
+          <div><label>Artist</label><input type="text" placeholder="Artist name" value="${esc(t.artist)}" oninput="updateTrackField(${i},'artist',this.value)"></div>
+        </div>
+        <div class="row row-3" style="margin-bottom:12px;">
+          <div><label>Weight</label><input type="text" placeholder="e.g. 7.5kg x 2" value="${esc(t.weight)}" oninput="updateTrackField(${i},'weight',this.value)"></div>
+          <div><label>Start At (cue)</label><input type="text" placeholder="e.g. Vocal, Drums…" value="${esc(t.startAt)}" oninput="updateTrackField(${i},'startAt',this.value)"></div>
+          <div><label>Intro Offset (secs)</label><input type="number" value="${t.introOffset}" oninput="updateTrackField(${i},'introOffset',this.value)"></div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="margin-top:0;">Song Duration</label>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="text" placeholder="m:ss e.g. 4:29" style="width:110px" oninput="parseDuration(${i},this.value)">
+            <span style="font-size:12px;color:var(--text-dim)">= <span id="dur-secs-${i}">${t.totalDuration}</span>s</span>
+          </div>
+        </div>
+        <div style="margin-bottom:6px;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Moves (${t.moves.length})</div>
+        ${t.moves.length?`<div style="display:grid;grid-template-columns:120px 1fr 65px auto 28px;gap:6px;padding:0 10px;margin-bottom:4px;">
+          <span style="font-size:10px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;">Timing</span>
+          <span style="font-size:10px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;">Move</span>
+          <span style="font-size:10px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase;">Reps</span>
+        </div>`:''}
+        <div class="moves-list">${movesHTML}</div>
+        <div class="add-move-btns">
+          <button class="btn btn-secondary btn-sm" onclick="addMove(${i},'data')">+ Move</button>
+          <button class="btn btn-secondary btn-sm" onclick="addMove(${i},'banner')">+ Banner</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function generateCode(){
+  const name=document.getElementById('routineName').value.trim()||'My Routine';
+  const font=document.getElementById('routineFont').value;
+  const suffix=name.replace(/[^a-zA-Z0-9]/g,'_').toUpperCase();
+  const L=[];
+  L.push(`// ${name} — BodyPump Routine\n`);
+  L.push(`const ROUTINE_NAME_${suffix} = ${JSON.stringify(name)};\n`);
+  L.push(`const TRACK_ICONS_${suffix} = {};\n`);
+  L.push(`const TRACK_ICON_MAP_${suffix} = {`);
+  TRACK_TYPES.forEach(t=>L.push(`  ${JSON.stringify(t.name)}: ${JSON.stringify(t.id)},`));
+  L.push(`};\n`);
+  L.push(`const TRACKS_${suffix} = [`);
+  tracks.forEach(t=>{
+    const type=TRACK_TYPES.find(tt=>tt.id===t.id);
+    L.push(`  {`);
+    L.push(`    id: ${JSON.stringify(t.id)},`);
+    L.push(`    name: ${JSON.stringify(type?type.name:t.id)},`);
+    L.push(`    song: ${JSON.stringify(t.song)},`);
+    L.push(`    artist: ${JSON.stringify(t.artist)},`);
+    L.push(`    weight: ${JSON.stringify(t.weight)},`);
+    L.push(`    startAt: ${JSON.stringify(t.startAt)},`);
+    L.push(`    introOffset: ${t.introOffset},`);
+    L.push(`    totalDuration: ${t.totalDuration},`);
+    L.push(`    moves: [`);
+    t.moves.forEach(m=>{
+      if(m.type==='banner')L.push(`      { type:'banner', move:${JSON.stringify(m.move)}, duration:${m.duration} },`);
+      else L.push(`      { type:'data', timing:${JSON.stringify(m.timing)}, move:${JSON.stringify(m.move)}, reps:${JSON.stringify(m.reps)}, highlight:${m.highlight}, duration:${m.duration} },`);
+    });
+    L.push(`    ]`);
+    L.push(`  },`);
+  });
+  L.push(`];\n`);
+  L.push(`const BREAK_AFTER_${suffix} = {`);
+  tracks.forEach(t=>L.push(`  ${JSON.stringify(t.id)}: ${t.breakAfter===null?'null':t.breakAfter},`));
+  L.push(`};\n`);
+  L.push(`window.ROUTINES = window.ROUTINES || [];`);
+  L.push(`window.ROUTINES.push({`);
+  L.push(`  name: ROUTINE_NAME_${suffix},`);
+  L.push(`  font: ${font?JSON.stringify(font):'null'},`);
+  L.push(`  tracks: TRACKS_${suffix},`);
+  L.push(`  icons: TRACK_ICONS_${suffix},`);
+  L.push(`  iconMap: TRACK_ICON_MAP_${suffix},`);
+  L.push(`  breakAfter: BREAK_AFTER_${suffix},`);
+  L.push(`});`);
+  generatedCode=L.join('\n');
+  document.getElementById('outputCode').textContent=generatedCode;
+  document.getElementById('outputBox').style.display='block';
+  document.getElementById('downloadBtn').style.display='inline-block';
+  document.getElementById('copyBtn').style.display='inline-block';
+  document.getElementById('generateStatus').textContent='✓ Ready';
+}
+
+function downloadFile(){
+  if(!generatedCode){alert('Click "Generate .js" first.');return;}
+  const name=document.getElementById('routineName').value.trim()||'my-routine';
+  const slug=name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  try{
+    const blob=new Blob([generatedCode],{type:'application/javascript'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=slug+'.js';
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);document.body.removeChild(a);},1000);
+  }catch(e){
+    alert('Download blocked — use "Copy All" instead and paste into a .js file.');
+  }
+}
+
+function copyToClipboard(){
+  if(!generatedCode)return;
+  navigator.clipboard.writeText(generatedCode).then(()=>{
+    document.getElementById('generateStatus').textContent='✓ Copied!';
+    setTimeout(()=>document.getElementById('generateStatus').textContent='✓ Ready',2000);
+  }).catch(()=>{
+    const el=document.getElementById('outputCode');
+    const range=document.createRange();
+    range.selectNodeContents(el);
+    const sel=window.getSelection();
+    sel.removeAllRanges();sel.addRange(range);
+    try{document.execCommand('copy');document.getElementById('generateStatus').textContent='✓ Copied!';}
+    catch(e){document.getElementById('generateStatus').textContent='Please manually select and copy the code above';}
+  });
+}
+
+function importRoutine(){
+  const src=document.getElementById('importBox').value.trim();
+  const status=document.getElementById('importStatus');
+  if(!src){status.textContent='⚠ Paste some code first';return;}
+  try{
+    const fontMatch=src.match(/font:\s*(null|"[^"]*")/);
+    const font=fontMatch?(fontMatch[1]==='null'?'':JSON.parse(fontMatch[1])):'';
+    const wrapped=src
+      .replace(/const ROUTINE_NAME_\w+/,'const __rname')
+      .replace(/const TRACK_ICONS_\w+/,'const __icons')
+      .replace(/const TRACK_ICON_MAP_\w+/,'const __iconmap')
+      .replace(/const TRACKS_\w+/,'const __tracks')
+      .replace(/const BREAK_AFTER_\w+/,'const __breaks')
+      .replace(/window\.ROUTINES[\s\S]*$/,'');
+    const fn=new Function(wrapped+'; return {name:__rname,tracks:__tracks,breaks:__breaks};');
+    const result=fn();
+    document.getElementById('routineName').value=result.name||'';
+    document.getElementById('routineFont').value=font;
+    tracks=result.tracks.map(t=>({
+      id:t.id,song:t.song||'',artist:t.artist||'',weight:t.weight||'',
+      startAt:t.startAt||'',introOffset:t.introOffset||15,
+      totalDuration:t.totalDuration||240,
+      breakAfter:result.breaks[t.id]??null,
+      moves:(t.moves||[]).map(m=>({...m}))
+    }));
+    openTracks=new Set();
+    renderTracks();
+    status.textContent=`✓ Loaded "${result.name}" — ${tracks.length} tracks`;
+    document.getElementById('importBox').value='';
+  }catch(e){
+    status.textContent='✗ Could not parse — paste the full .js file contents';
+    console.error(e);
+  }
+}
+
+renderTracks();
+</script>
+</body>
+</html>
