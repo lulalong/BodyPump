@@ -200,7 +200,8 @@ const TRACKS_POST_PUNK_1 = [
       { type:'data', timing:"8/8", move:"Round the world", reps:"2", highlight:false, duration:16 },
       { type:'banner', move:"Hold", duration:8 },
       { type:'data', timing:"4/4", move:"Lateral raise", reps:"4", highlight:false, duration:16 },
-      { type:'data', timing:"4/4/4/4", move:"Side front side down", reps:"4", highlight:false, duration:16 },
+      { type:'data', timing:"4/4/4/4", move:"Side front side down", reps:"2", highlight:false, duration:16 },
+   { type:'banner', move:"Hold", duration:8 },
       { type:'data', timing:"8/8", move:"Round the world", reps:"3", highlight:false, duration:16 },
     ]
   },
