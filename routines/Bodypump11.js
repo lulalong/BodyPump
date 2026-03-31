@@ -58,7 +58,6 @@ const TRACKS_POST_PUNK_1 = [
       { type:'data', timing:"2/2/2/2", move:"Stagger squat", reps:"4", highlight:false, duration:4 },
       { type:'data', timing:"4/4", move:"Medium squat", reps:"8", highlight:false, duration:8 },
       { type:'data', timing:"2/2/2/2", move:"Stagger squat", reps:"8", highlight:false, duration:8 },
-      { type:'data', timing:"4/4", move:"Medium squat", reps:"8", highlight:false, duration:8 },
       { type:'banner', move:"Rest", duration:8 },
       { type:'data', timing:"2/1/1/2", move:"Down, single bounce, up", reps:"8", highlight:false, duration:8 },
       { type:'data', timing:"2/2/2/2", move:"Stagger squat", reps:"8", highlight:false, duration:8 },
