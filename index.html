@@ -1604,7 +1604,7 @@ function stopCalibration() {
   document.body.classList.remove('calibrating');
   document.getElementById('calib-bar').classList.remove('visible');
   document.getElementById('btn-play').disabled = false;
-  document.getElementById('btn-calib').textContent = '🎯 Calibrate';
+  document.getElementById('btn-calib').textContent = '🎯';
   document.getElementById('btn-calib').onclick = startCalibration;
   // Restore real timestamps including intro offset
   const track = TRACKS[currentTrackIdx];
