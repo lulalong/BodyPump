@@ -76,7 +76,7 @@ const TRACKS_POST_PUNK_1 = [
       { type:'data', timing:"8/8", move:"Slow press", reps:"2", highlight:false, duration:2 },
       { type:'data', timing:"4/4", move:"Medium press", reps:"7", highlight:false, duration:7 },
       { type:'data', timing:"1/1/1/1", move:"Pulse for pain", reps:"8", highlight:false, duration:8 },
-      { type:'data', timing:"8/8", move:"Slow presses", reps:"2", highlight:false, duration:2 },
+      { type:'data', timing:"4/4", move:"Medium presses", reps:"2", highlight:false, duration:2 },
       { type:'banner', move:"Break to oof", duration:8 },
       { type:'data', timing:"8/8", move:"Slow press", reps:"2", highlight:false, duration:2 },
       { type:'data', timing:"4/4", move:"Medium press", reps:"7", highlight:false, duration:7 },
