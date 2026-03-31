@@ -151,7 +151,7 @@ const TRACKS_POST_PUNK_1 = [
       { type:'data', timing:"1/1/1/1", move:"Triple Pulse", reps:"4", highlight:false, duration:4 },
       { type:'banner', move:"Hold", duration:8 },
       { type:'data', timing:"4/4", move:"Medium", reps:"4", highlight:false, duration:4 },
-      { type:'data', timing:"1/1/1/1", move:"Triple Pulse", reps:"4", highlight:false, duration:8 },
+      { type:'data', timing:"1/1/1/1", move:"Triple Pulse", reps:"8", highlight:false, duration:8 },
     ]
   },
   {
