@@ -967,8 +967,34 @@
     <button class="btn btn-secondary" id="btn-prev-track" onclick="prevTrack()">⟵</button>
     <button class="btn btn-secondary" id="btn-restart" onclick="restartTrack()">↺</button>
     <button class="btn btn-secondary" id="btn-calib" onclick="startCalibration()">🎯</button>
+    <button class="btn btn-secondary" id="btn-calib-edit" onclick="openCalibEditor()">✏️</button>
     <button class="btn btn-secondary" id="btn-next-track" onclick="nextTrack()">⟶</button>
     <button class="btn btn-secondary" id="btn-autoplay" onclick="toggleAutoplay()" title="Autoplay">▶▶</button>
+  </div>
+</div>
+<!-- Calibration Editor Modal -->
+<div id="calib-editor" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:200;flex-direction:column;padding:24px;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#ffaa00;" id="calib-editor-title">Edit Calibration</h2>
+    <button class="btn btn-secondary" onclick="closeCalibEditor()" style="font-size:14px;">Close</button>
+  </div>
+  <div style="font-size:12px;color:var(--text-dim);letter-spacing:1px;margin-bottom:16px;">Edit values then tap Save. Changes apply immediately and persist in this browser.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;max-width:400px;">
+    <div>
+      <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;">Intro Offset (s)</div>
+      <input type="number" id="ce-intro" style="width:100%;background:#181818;border:1px solid #333;border-radius:4px;color:#f0f0f0;font-size:16px;padding:10px 12px;outline:none;">
+    </div>
+    <div>
+      <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;">Total Duration (s)</div>
+      <input type="number" id="ce-total" style="width:100%;background:#181818;border:1px solid #333;border-radius:4px;color:#f0f0f0;font-size:16px;padding:10px 12px;outline:none;">
+    </div>
+  </div>
+  <div style="font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:10px;">Move Durations (s)</div>
+  <div id="ce-moves" style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;"></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+    <button class="btn btn-primary" onclick="saveCalibEditor()">Save</button>
+    <button class="btn btn-secondary" onclick="copyCalibEditor()">Copy to clipboard</button>
+    <span id="ce-status" style="font-size:13px;color:var(--text-dim);"></span>
   </div>
 </div>
 
@@ -1745,6 +1771,65 @@ function copyCalibResult() {
     const btn = document.querySelector('#calib-result .btn-primary');
     btn.textContent = 'Copied ✓';
     setTimeout(() => btn.textContent = 'Copy to clipboard', 2000);
+  });
+}
+// ─────────────────────────────────────────────
+// CALIBRATION EDITOR
+// ─────────────────────────────────────────────
+function openCalibEditor() {
+  const track = TRACKS[currentTrackIdx];
+  document.getElementById('calib-editor-title').textContent = 'Edit: ' + track.name.toUpperCase();
+  document.getElementById('ce-intro').value = track.introOffset;
+  document.getElementById('ce-total').value = track.totalDuration;
+  document.getElementById('ce-status').textContent = '';
+
+  const movesEl = document.getElementById('ce-moves');
+  movesEl.innerHTML = track.moves.map((m, i) => {
+    const label = m.type === 'banner' ? '[banner] ' + m.move : (m.timing || '—') + ' · ' + m.move;
+    return '<div style="display:grid;grid-template-columns:1fr 80px;gap:10px;align-items:center;">' +
+      '<div style="font-size:13px;color:#aaa;">' + label + '</div>' +
+      '<input type="number" id="ce-move-' + i + '" value="' + m.duration + '" style="background:#181818;border:1px solid #333;border-radius:4px;color:#f0f0f0;font-size:15px;padding:8px;outline:none;width:100%;">' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('calib-editor').style.display = 'flex';
+}
+
+function closeCalibEditor() {
+  document.getElementById('calib-editor').style.display = 'none';
+}
+
+function saveCalibEditor() {
+  const track = TRACKS[currentTrackIdx];
+  track.introOffset = parseInt(document.getElementById('ce-intro').value) || track.introOffset;
+  track.totalDuration = parseInt(document.getElementById('ce-total').value) || track.totalDuration;
+  track.moves.forEach((m, i) => {
+    const el = document.getElementById('ce-move-' + i);
+    if (el) m.duration = parseInt(el.value) || m.duration;
+  });
+  saveCalibrations();
+  buildTrackSelect();
+  document.getElementById('ce-status').textContent = '✓ Saved';
+  setTimeout(() => document.getElementById('ce-status').textContent = '', 2000);
+}
+
+function copyCalibEditor() {
+  const track = TRACKS[currentTrackIdx];
+  const intro = parseInt(document.getElementById('ce-intro').value) || track.introOffset;
+  const total = parseInt(document.getElementById('ce-total').value) || track.totalDuration;
+  const lines = [];
+  lines.push('// ── ' + track.name.toUpperCase() + ' — Calibrated timestamps ──');
+  lines.push('// totalDuration: ' + total + ', introOffset: ' + intro);
+  lines.push('');
+  track.moves.forEach((m, i) => {
+    const el = document.getElementById('ce-move-' + i);
+    const dur = el ? (parseInt(el.value) || m.duration) : m.duration;
+    const label = m.type === 'banner' ? '[banner] ' + m.move : (m.timing || '—') + ' · ' + m.move;
+    lines.push('{ duration: ' + dur + ' },  // ' + label);
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    document.getElementById('ce-status').textContent = '✓ Copied!';
+    setTimeout(() => document.getElementById('ce-status').textContent = '', 2000);
   });
 }
 
